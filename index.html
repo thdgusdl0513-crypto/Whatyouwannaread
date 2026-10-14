@@ -150,8 +150,16 @@ input::placeholder,textarea::placeholder{color:var(--ink-faint)}
 .entry-no{flex:none;font-size:11px;font-weight:700;color:var(--orange)}
 .entry-author{display:block;margin-top:3px;font-family:var(--serif);font-weight:700;font-size:13.5px;color:var(--red)}
 .entry-meta{display:block;margin-top:5px;font-size:12px;color:var(--ink-soft)}
-.entry-stars{display:block;margin-top:4px;font-size:12px;letter-spacing:2px;color:var(--red)}
-.entry-stars i{font-style:normal;color:var(--ink-ghost)}
+.entry-stars{display:flex;align-items:center;gap:6px;margin-top:4px}
+.entry-stars b{font-size:11.5px;font-weight:700;color:var(--red)}
+
+/* 별 (반 개까지) */
+.srow{display:inline-flex;gap:1px;line-height:1;vertical-align:middle}
+.st{position:relative;display:inline-block;color:var(--ink-ghost)}
+.st::before{content:"★"}
+.st i{position:absolute;left:0;top:0;overflow:hidden;color:var(--red);font-style:normal;white-space:nowrap}
+.st i::before{content:"★"}
+.srow.sm{font-size:12.5px}
 .entry-review{
   display:block;margin-top:9px;
   font-family:var(--serif);font-size:15px;line-height:1.72;
@@ -191,6 +199,117 @@ input::placeholder,textarea::placeholder{color:var(--ink-faint)}
   border:0;background:none;padding:6px 0;font-size:12.5px;color:var(--ink-soft);
   text-decoration:underline;text-underline-offset:3px;
 }
+
+/* 셋째 장: 독서 통계 */
+.stat-head{display:flex;align-items:baseline;justify-content:space-between;margin:36px 0 0}
+.stat-head h1{margin:0;font-family:var(--serif);font-weight:800;font-size:clamp(25px,7.5vw,30px);letter-spacing:-.02em}
+.yearnav{display:flex;align-items:center;gap:2px}
+.yearnav button{
+  width:38px;height:38px;border:0;background:none;border-radius:50%;
+  font-family:var(--serif);font-size:20px;color:var(--ink);
+}
+.yearnav button:disabled{opacity:.2}
+.stat-sub{margin:6px 0 0;font-family:var(--serif);font-weight:700;font-size:15px;letter-spacing:.1em;color:var(--red)}
+
+.tiles{display:grid;grid-template-columns:repeat(3,1fr);margin:26px 0 0;border-top:1.5px solid var(--ink);border-bottom:1px solid var(--rule)}
+.tile{padding:13px 0 12px 12px;border-left:1px solid var(--rule)}
+.tile:first-child{border-left:0;padding-left:0}
+.tile span{display:block;font-size:11.5px;color:var(--ink-soft)}
+.tile b{display:block;margin-top:3px;font-family:var(--serif);font-weight:800;font-size:27px;line-height:1.1;letter-spacing:-.02em}
+.tile b small{margin-left:2px;font-size:13px;font-weight:700}
+
+.stat-sec{margin:36px 0 0}
+.stat-sec > h2{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin:0 0 14px;padding-bottom:7px;border-bottom:1.5px solid var(--ink);
+  font-family:var(--serif);font-weight:800;font-size:17px;
+}
+.stat-sec > h2 small{font-family:var(--sans);font-weight:400;font-size:11.5px;color:var(--ink-soft)}
+
+/* 달마다 쌓인 책 */
+.months{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;align-items:end}
+.mon{
+  display:flex;flex-direction:column;align-items:center;justify-content:flex-end;
+  min-width:0;height:var(--mon-h,150px);padding:0 0 4px;border:0;background:none;border-radius:2px;
+}
+.mon .n{font-family:var(--serif);font-weight:800;font-size:12px;line-height:1;margin-bottom:5px}
+.mon .n.zero{color:var(--ink-ghost);font-weight:400}
+.mon .pile{display:flex;flex-direction:column-reverse;align-items:center;gap:1.5px;width:100%}
+.mon .slab{display:block;height:7px;border-radius:1px}
+.mon .more{font-size:9px;line-height:1;color:var(--ink-soft);margin-top:2px}
+.mon .m{
+  margin-top:7px;padding-top:5px;width:100%;border-top:1.5px solid var(--ink);
+  font-size:11px;line-height:1;color:var(--ink-soft);
+}
+.mon.now .m{color:var(--ink);font-weight:700}
+.mon[aria-pressed="true"]{background:var(--paper-hi)}
+.mon[aria-pressed="true"] .m{color:var(--red);font-weight:700}
+.mon:disabled{cursor:default}
+.c0{background:var(--ink)}
+.c1{background:var(--red)}
+.c2{background:var(--orange)}
+.c3{background:var(--ink-soft)}
+.stat-note{margin:10px 0 0;font-size:12px;line-height:1.55;color:var(--ink-soft);word-break:keep-all}
+
+/* 해마다 꽂힌 책 */
+.shelves{display:flex;flex-direction:column;gap:2px}
+.shelf{
+  display:grid;grid-template-columns:52px 1fr 40px;align-items:end;gap:10px;
+  width:100%;padding:9px 6px 0;border:0;background:none;border-radius:2px;text-align:left;
+}
+.shelf .y{font-family:var(--serif);font-weight:800;font-size:15px;line-height:1.2;padding-bottom:6px;white-space:pre-line}
+.shelf .row{
+  display:flex;align-items:flex-end;gap:1.5px;min-height:34px;overflow:hidden;
+  border-bottom:2.5px solid var(--ink);padding:0 2px;
+}
+.shelf .spine{display:block;width:5px;flex:none;border-radius:1px 1px 0 0}
+.shelf .over{font-size:10px;color:var(--ink-soft);margin-left:4px;padding-bottom:2px}
+.shelf .c{font-family:var(--serif);font-weight:800;font-size:15px;text-align:right;padding-bottom:6px}
+.shelf .c small{font-size:11px;font-weight:700}
+.shelf[aria-pressed="true"]{background:var(--paper-hi)}
+.shelf[aria-pressed="true"] .y{color:var(--red)}
+
+/* 별점 나누기 */
+.rates{display:flex;flex-direction:column}
+.rate{
+  display:grid;grid-template-columns:84px 1fr 34px;align-items:center;gap:10px;
+  width:100%;padding:7px 6px;border:0;border-bottom:1px solid var(--rule);background:none;text-align:left;
+}
+.rate:disabled{cursor:default;opacity:.45}
+.rate .lab{font-size:12px;color:var(--ink-soft)}
+.rate .rbar{display:block;height:6px;background:var(--ink-ghost);border-radius:3px;overflow:hidden}
+.rate .rbar i{display:block;height:100%;background:var(--red);border-radius:3px}
+.rate .c{font-family:var(--serif);font-weight:800;font-size:14px;text-align:right}
+.rate[aria-pressed="true"]{background:var(--paper-hi)}
+
+/* 목록 */
+.list-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:0 0 6px;flex-wrap:wrap}
+.seg{display:inline-flex;border:1.5px solid var(--ink);border-radius:2px;overflow:hidden}
+.seg button{border:0;background:none;padding:6px 12px;font-size:12.5px}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;padding:5px 9px 5px 11px;
+  border:1px solid var(--ink);border-radius:20px;background:none;font-size:12px;
+}
+.chip i{font-style:normal;font-size:13px;line-height:1;opacity:.7}
+.grp{
+  display:flex;justify-content:space-between;align-items:baseline;
+  margin:18px 0 0;padding-bottom:5px;border-bottom:1px solid var(--ink);
+  font-family:var(--serif);font-weight:800;font-size:14.5px;
+}
+.grp small{font-family:var(--sans);font-weight:400;font-size:11.5px;color:var(--ink-soft)}
+.mini{
+  display:grid;grid-template-columns:34px 1fr auto;gap:12px;align-items:center;
+  width:100%;padding:10px 0;border:0;border-bottom:1px solid var(--rule);background:none;text-align:left;
+}
+.mini .cover{width:34px;box-shadow:1px 2px 5px rgba(0,0,0,.18)}
+.mini .cover-gen b{font-size:4.8px;-webkit-line-clamp:3}
+.mini .cover-gen em{display:none}
+.mini strong{display:block;font-family:var(--serif);font-weight:800;font-size:14.5px;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
+.mini small{display:block;margin-top:2px;font-size:11.5px;color:var(--ink-soft)}
+.mini .r{text-align:right;white-space:nowrap}
+.mini .r small{margin-top:3px}
 
 /* 다음 장: 하루 일기 */
 .leaves{width:calc(100% - 28px);max-width:480px;margin:0 auto}
@@ -297,9 +416,17 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 .field .count{float:right;font-weight:400}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .isbn-row{display:grid;grid-template-columns:1fr 78px;gap:16px;align-items:start}
-.stars{display:flex;gap:2px;margin-top:2px}
-.stars button{border:0;background:none;padding:4px 6px 4px 0;font-size:28px;line-height:1;color:var(--ink-ghost)}
-.stars button.on{color:var(--red)}
+.stars{display:flex;align-items:center;gap:4px;margin-top:4px}
+.star-pick{position:relative;font-size:32px;line-height:1}
+.star-pick button{
+  position:absolute;top:-6px;bottom:-6px;width:50%;
+  border:0;padding:0;background:none;
+}
+.star-pick button:first-of-type{left:0}
+.star-pick button:last-of-type{right:0}
+.star-pick .st i{width:0}
+.stars-val{margin-left:8px;font-family:var(--serif);font-weight:800;font-size:16px;color:var(--red);min-width:2.4em}
+.stars-val.none{font-family:var(--sans);font-weight:400;font-size:12.5px;color:var(--ink-faint)}
 
 .actions{display:flex;gap:10px;margin-top:6px}
 .btn-main{
@@ -381,6 +508,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   <div class="tabs-in">
     <button type="button" class="tab" data-go="books" aria-current="page">독서 기록</button>
     <button type="button" class="tab" data-go="diary">하루 일기</button>
+    <button type="button" class="tab" data-go="stats">통계</button>
     <div class="tab-side">
       <button type="button" id="syncBtn">시트 연결</button>
       <button type="button" data-settings>설정</button>
@@ -410,6 +538,53 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     </div>
 
     <div id="shelf"></div>
+
+    <footer class="imprint">
+      <button type="button" data-settings>설정과 사용법</button>
+    </footer>
+  </section>
+
+  <!-- 통계 장 -->
+  <section class="paper" id="pageStats" aria-label="독서 통계" hidden>
+    <p class="series">독서 통계<b id="statNo"></b></p>
+    <div class="stat-head">
+      <h1 id="statYear"></h1>
+      <div class="yearnav">
+        <button type="button" id="yearPrev" aria-label="앞 해">‹</button>
+        <button type="button" id="yearNext" aria-label="다음 해">›</button>
+      </div>
+    </div>
+    <p class="stat-sub" id="statWho"></p>
+
+    <div class="tiles" id="tiles"></div>
+
+    <section class="stat-sec">
+      <h2>달마다 읽은 책 <small>책 한 권이 한 칸</small></h2>
+      <div class="months" id="months"></div>
+      <p class="stat-note" id="monthNote"></p>
+    </section>
+
+    <section class="stat-sec">
+      <h2>해마다 읽은 책 <small>누르면 그해로</small></h2>
+      <div class="shelves" id="shelves"></div>
+    </section>
+
+    <section class="stat-sec">
+      <h2>별점으로 나누기 <small id="rateSum"></small></h2>
+      <div class="rates" id="rates"></div>
+    </section>
+
+    <section class="stat-sec" id="listSec">
+      <h2><span id="listTitle">읽은 책 목록</span> <small id="listCount"></small></h2>
+      <div class="list-tools">
+        <div class="seg" role="group" aria-label="목록 묶는 방법">
+          <button type="button" data-group="month" aria-pressed="true">달별</button>
+          <button type="button" data-group="rating" aria-pressed="false">별점별</button>
+        </div>
+        <div class="chips" id="chips"></div>
+      </div>
+      <div id="statList"></div>
+    </section>
 
     <footer class="imprint">
       <button type="button" data-settings>설정과 사용법</button>
@@ -478,6 +653,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       <div class="field">
         <span class="label" id="starsLabel">별점</span>
         <div class="stars" id="stars" role="group" aria-labelledby="starsLabel"></div>
+        <p class="hint">별의 왼쪽 반을 누르면 반 개, 오른쪽을 누르면 한 개입니다. 같은 자리를 다시 누르면 지워집니다.</p>
       </div>
       <div class="field">
         <label for="fReview">한줄 감상평 <span class="count" id="reviewCount">0/100</span></label>
@@ -623,6 +799,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       <dl class="howto">
         <dt>독서 기록</dt>
         <dd>맨 위에서 기록하는 사람의 이름을 고른 뒤 아래 버튼을 누르고, 책 제목을 찾거나 직접 적습니다. ISBN 13자리를 넣으면 교보문고 표지가 붙습니다. 적어 둔 기록을 누르면 고치거나 지울 수 있습니다.</dd>
+        <dt>통계</dt>
+        <dd>‘통계’ 장에서 해마다, 달마다 읽은 책을 책 쌓기 모양으로 봅니다. 달이나 해, 별점 줄을 누르면 아래 목록이 그것만 보여 주고, 위에 생긴 동그란 표시의 ✕를 누르면 풀립니다. 목록은 달별이나 별점별로 묶어 볼 수 있습니다.</dd>
         <dt>책 찾기</dt>
         <dd>제목을 다 적지 않아도 됩니다. 제목의 일부, 저자 이름, 출판사 이름을 두 글자 넘게 적으면 관련된 책이 바로 아래에 나옵니다. 여러 낱말을 띄어 쓰면 더 좁혀집니다.</dd>
         <dt>카카오 키 받기</dt>
@@ -654,7 +832,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '10월 2일 여덟 번째 판';
+  var VERSION = '10월 14일 열 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -813,7 +991,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   }
 
   function applyTheme() {
-    var t = store.themes[writer][page];
+    var t = store.themes[writer][themePage()];
     var frame = t.frame, paper = t.paper;
     var ink = readable(paper);
     var dark = ink === LIGHT_INK;
@@ -876,7 +1054,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       var p = localStorage.getItem(PHOTO_KEY) || '';
       if (/^data:image\//.test(p)) photo = p;
       kakaoKey = str(localStorage.getItem(KAKAO_KEY), 80);
-      if (localStorage.getItem(PAGE_KEY) === 'diary') page = 'diary';
+      var savedPage = localStorage.getItem(PAGE_KEY);
+      if (savedPage === 'diary' || savedPage === 'stats') page = savedPage;
       var w = localStorage.getItem(WRITER_KEY);
       if (WRITERS.indexOf(w) !== -1) writer = w;
       localStorage.setItem(KEY + '-check', '1');
@@ -913,7 +1092,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       isbn: str(b.isbn, 20).replace(/[^0-9Xx]/g, ''),
       thumb: thumb,
       date: validDate(b.date),
-      rating: Math.max(0, Math.min(5, parseInt(b.rating, 10) || 0)),
+      rating: cleanRating(b.rating),
       review: str(b.review, 100),
       createdAt: created,
       updatedAt: Number(b.updatedAt) || created
@@ -933,6 +1112,24 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       createdAt: created,
       updatedAt: Number(d.updatedAt) || created
     };
+  }
+
+  function cleanRating(v) {
+    var n = Math.round((parseFloat(v) || 0) * 2) / 2;
+    return Math.max(0, Math.min(5, n));
+  }
+  function ratingText(r) { return r ? (r % 1 ? r.toFixed(1) : r + '.0') : ''; }
+
+  // 별 다섯 개, 반 개까지 칠한다
+  function starRow(r, cls) {
+    var row = h('span', { class: 'srow' + (cls ? ' ' + cls : ''), 'aria-hidden': 'true' });
+    for (var i = 1; i <= 5; i++) {
+      var fill = r >= i ? 100 : r >= i - 0.5 ? 50 : 0;
+      var st = h('span', { class: 'st' });
+      if (fill) { var f = h('i'); f.style.width = fill + '%'; st.appendChild(f); }
+      row.appendChild(st);
+    }
+    return row;
   }
 
   function newId(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
@@ -1000,10 +1197,12 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   /* ---------- 장 넘기기 ---------- */
   function setPage(p, keepScroll) {
-    page = p === 'diary' ? 'diary' : 'books';
+    page = p === 'diary' || p === 'stats' ? p : 'books';
     document.body.setAttribute('data-page', page);
     $('pageBooks').hidden = page !== 'books';
     $('pageDiary').hidden = page !== 'diary';
+    $('pageStats').hidden = page !== 'stats';
+    if (page === 'stats') renderStats();
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) {
       if (t.getAttribute('data-go') === page) t.setAttribute('aria-current', 'page');
       else t.removeAttribute('aria-current');
@@ -1013,6 +1212,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     updateBarLabel();
     if (!keepScroll) window.scrollTo(0, 0);
   }
+
+  // 통계 장은 독서 기록 장의 색을 쓴다
+  function themePage() { return page === 'diary' ? 'diary' : 'books'; }
 
   function todayEntry() {
     var t = today();
@@ -1029,7 +1231,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   function bookLabel(who) { return who + iGa(who) + ' 읽은 책 기록하기'; }
 
   function updateBarLabel() {
-    $('addBtn').textContent = page === 'books'
+    $('addBtn').textContent = page !== 'diary'
       ? bookLabel(writer)
       : writer + '의 오늘 일기 ' + (todayEntry() ? '고치기' : '쓰기');
   }
@@ -1042,6 +1244,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     renderPlate();
     renderBooks();
     renderDiary();
+    renderStats();
     updateBarLabel();
     updateSyncLabel();
     Array.prototype.forEach.call(document.querySelectorAll('.storage-notice'), function (n) {
@@ -1122,8 +1325,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var meta = [b.publisher, dateText(b.date)].filter(Boolean).join(', ');
     var stars = null;
     if (b.rating) {
-      stars = h('span', { class: 'entry-stars', 'aria-label': '별점 ' + b.rating + '점' },
-        '★★★★★'.slice(0, b.rating), h('i', null, '★★★★★'.slice(b.rating)));
+      stars = h('span', { class: 'entry-stars', 'aria-label': '별점 ' + ratingText(b.rating) + '점' },
+        starRow(b.rating, 'sm'), h('b', null, ratingText(b.rating)));
     }
     var btn = h('button', { type: 'button', class: 'entry-open', onclick: open, 'aria-label': b.title + ' 기록 고치기' },
       h('span', { class: 'entry-top' },
@@ -1155,6 +1358,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     applyTheme();
     renderBooks();
     renderDiary();
+    renderStats();
     updateBarLabel();
   }
 
@@ -1191,24 +1395,278 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     });
   }
 
+  /* ---------- 통계 ---------- */
+  var stat = { year: new Date().getFullYear(), month: 0, rating: null, group: 'month' };
+
+  function hashOf(str_) {
+    var x = 0;
+    for (var i = 0; i < str_.length; i++) x = (x * 31 + str_.charCodeAt(i)) | 0;
+    return Math.abs(x);
+  }
+  function yearOf(b) { return b.date ? Number(b.date.slice(0, 4)) : 'none'; }
+  function monthOf(b) { return b.date ? Number(b.date.slice(5, 7)) : 0; }
+  function sameRating(b, r) { return r === null || b.rating === r; }
+
+  function renderStats() {
+    if (!$('pageStats')) return;
+    var mine = store.books.filter(function (b) { return b.writer === writer; });
+    var now = new Date(), thisYear = now.getFullYear(), thisMonth = now.getMonth() + 1;
+
+    // 해 목록
+    var yearSet = {};
+    yearSet[thisYear] = true;
+    mine.forEach(function (b) { yearSet[yearOf(b)] = true; });
+    var years = Object.keys(yearSet).filter(function (y) { return y !== 'none'; })
+      .map(Number).sort(function (a, b) { return a - b; });
+    var hasUndated = !!yearSet.none;
+    if (stat.year !== 'none' && years.indexOf(stat.year) === -1) stat.year = thisYear;
+    if (stat.year === 'none' && !hasUndated) stat.year = thisYear;
+
+    var inYear = mine.filter(function (b) { return yearOf(b) === stat.year; });
+    var isNow = stat.year === thisYear;
+
+    $('statYear').textContent = stat.year === 'none' ? '날짜 없는 책' : stat.year + '년';
+    $('statWho').textContent = writer + '의 서재';
+    $('statNo').textContent = '';
+    var yi = years.indexOf(stat.year);
+    $('yearPrev').disabled = stat.year === 'none' ? !years.length : yi <= 0;
+    $('yearNext').disabled = stat.year === 'none' || yi >= years.length - 1;
+
+    // 한눈에 세 칸
+    var counts = [];
+    for (var m = 1; m <= 12; m++) counts[m] = 0;
+    inYear.forEach(function (b) { if (monthOf(b)) counts[monthOf(b)] += 1; });
+    var rated = inYear.filter(function (b) { return b.rating; });
+    var avg = rated.length ? rated.reduce(function (t, b) { return t + b.rating; }, 0) / rated.length : 0;
+    var bestM = 0;
+    for (m = 1; m <= 12; m++) if (counts[m] > (counts[bestM] || 0)) bestM = m;
+
+    var tiles = $('tiles');
+    tiles.textContent = '';
+    function tile(label, big, unit) {
+      tiles.appendChild(h('div', { class: 'tile' }, h('span', null, label),
+        h('b', null, big, unit ? h('small', null, unit) : null)));
+    }
+    tile(stat.year === 'none' ? '모두' : '그해 읽은 책', String(inYear.length), '권');
+    if (stat.year === 'none') tile('별점 매긴 책', String(rated.length), '권');
+    else if (isNow) tile('이번 달', String(counts[thisMonth]), '권');
+    else tile('가장 많이 읽은 달', bestM ? String(bestM) : '–', bestM ? '월' : '');
+    tile('평균 별점', avg ? (Math.round(avg * 10) / 10).toFixed(1) : '–', '');
+
+    // 달마다
+    var months = $('months');
+    months.textContent = '';
+    var max = Math.max.apply(null, counts.slice(1).concat([1]));
+    var SHOW = 16;
+    var slabH = Math.max(3, Math.min(11, Math.floor(104 / Math.min(max, SHOW)) - 1.5));
+    // 가장 많이 읽은 달에 맞춰 높이를 정해, 위쪽에 빈 공간이 많이 남지 않게 한다.
+    months.style.setProperty('--mon-h', Math.round(Math.max(4, Math.min(max, SHOW)) * (slabH + 1.5) + 50) + 'px');
+    var byMonth = {};
+    inYear.forEach(function (b) { var mm = monthOf(b); if (mm) (byMonth[mm] = byMonth[mm] || []).push(b); });
+    for (m = 1; m <= 12; m++) {
+      (function (m) {
+        var list = (byMonth[m] || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+        var future = isNow && m > thisMonth;
+        var pile = h('span', { class: 'pile' });
+        list.slice(0, SHOW).forEach(function (b) {
+          var hs = hashOf(b.id + b.title);
+          var slab = h('span', { class: 'slab c' + (hs % 4) });
+          slab.style.height = slabH + 'px';
+          slab.style.width = (62 + hs % 34) + '%';
+          pile.appendChild(slab);
+        });
+        var btn = h('button', {
+          type: 'button',
+          class: 'mon' + (isNow && m === thisMonth ? ' now' : ''),
+          'aria-pressed': stat.month === m ? 'true' : 'false',
+          'aria-label': m + '월 ' + counts[m] + '권',
+          disabled: (future || stat.year === 'none') ? true : null,
+          onclick: function () { stat.month = stat.month === m ? 0 : m; renderStats(); showList(); }
+        },
+          h('span', { class: 'n' + (counts[m] ? '' : ' zero') }, counts[m] ? String(counts[m]) : (future ? '' : '·')),
+          list.length > SHOW ? h('span', { class: 'more' }, '+' + (list.length - SHOW)) : null,
+          pile,
+          h('span', { class: 'm' }, String(m)));
+        if (future) btn.style.opacity = '.35';
+        months.appendChild(btn);
+      })(m);
+    }
+    var note;
+    if (stat.year === 'none') note = '다 읽은 날을 적지 않은 책은 달마다 나누지 못합니다. 아래 목록에서 눌러 날짜를 넣어 보세요.';
+    else if (!inYear.length) note = stat.year + '년에는 아직 기록한 책이 없습니다.';
+    else {
+      note = isNow ? '이번 달은 ' + counts[thisMonth] + '권째입니다. ' : '';
+      note += '가장 많이 읽은 달은 ' + bestM + '월로 ' + counts[bestM] + '권입니다. 달을 누르면 그 달 책만 아래에 보입니다.';
+    }
+    $('monthNote').textContent = note;
+
+    // 해마다
+    var shelves = $('shelves');
+    shelves.textContent = '';
+    var shelfYears = years.slice().reverse();
+    if (hasUndated) shelfYears.push('none');
+    var SPINES = 44;
+    shelfYears.forEach(function (y) {
+      var list = mine.filter(function (b) { return yearOf(b) === y; })
+        .sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+      var row = h('span', { class: 'row' });
+      list.slice(0, SPINES).forEach(function (b) {
+        var hs = hashOf(b.title + b.id);
+        var sp = h('span', { class: 'spine c' + (hs % 4) });
+        sp.style.height = (20 + hs % 15) + 'px';
+        row.appendChild(sp);
+      });
+      if (list.length > SPINES) row.appendChild(h('span', { class: 'over' }, '+' + (list.length - SPINES)));
+      shelves.appendChild(h('button', {
+        type: 'button', class: 'shelf', 'aria-pressed': stat.year === y ? 'true' : 'false',
+        'aria-label': (y === 'none' ? '날짜 없음' : y + '년') + ' ' + list.length + '권',
+        onclick: function () { stat.year = y; stat.month = 0; stat.rating = null; renderStats(); }
+      },
+        h('span', { class: 'y' }, y === 'none' ? '날짜\n없음' : String(y)),
+        row,
+        h('span', { class: 'c' }, String(list.length), h('small', null, '권'))));
+    });
+
+    // 별점으로 나누기 (그해, 고른 달 안에서)
+    var scope = inYear.filter(function (b) { return !stat.month || monthOf(b) === stat.month; });
+    var buckets = {};
+    scope.forEach(function (b) { buckets[b.rating] = (buckets[b.rating] || 0) + 1; });
+    var keys = Object.keys(buckets).map(Number).sort(function (a, b) { return b - a; });
+    if (keys[keys.length - 1] === 0) { keys.pop(); keys.push(0); }
+    var rmax = Math.max.apply(null, keys.map(function (k) { return buckets[k]; }).concat([1]));
+    var rates = $('rates');
+    rates.textContent = '';
+    $('rateSum').textContent = stat.month ? stat.month + '월 안에서' : '';
+    if (!keys.length) {
+      rates.appendChild(h('p', { class: 'stat-note' }, '별점을 나눌 책이 아직 없습니다.'));
+    }
+    keys.forEach(function (k) {
+      var bar = h('span', { class: 'rbar' }, h('i'));
+      bar.firstChild.style.width = Math.round(buckets[k] / rmax * 100) + '%';
+      rates.appendChild(h('button', {
+        type: 'button', class: 'rate', 'aria-pressed': stat.rating === k ? 'true' : 'false',
+        'aria-label': (k ? '별점 ' + ratingText(k) : '별점 없음') + ' ' + buckets[k] + '권',
+        onclick: function () { stat.rating = stat.rating === k ? null : k; renderStats(); showList(); }
+      },
+        k ? h('span', { class: 'lab' }, starRow(k, 'sm')) : h('span', { class: 'lab' }, '별점 없음'),
+        bar,
+        h('span', { class: 'c' }, String(buckets[k]))));
+    });
+
+    // 목록
+    Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-group') === stat.group ? 'true' : 'false');
+    });
+    var chips = $('chips');
+    chips.textContent = '';
+    if (stat.month) chips.appendChild(h('button', {
+      type: 'button', class: 'chip', 'aria-label': stat.month + '월만 보기 풀기',
+      onclick: function () { stat.month = 0; renderStats(); }
+    }, stat.month + '월', h('i', null, '✕')));
+    if (stat.rating !== null) chips.appendChild(h('button', {
+      type: 'button', class: 'chip', 'aria-label': '별점으로 고른 것 풀기',
+      onclick: function () { stat.rating = null; renderStats(); }
+    }, stat.rating ? '★ ' + ratingText(stat.rating) : '별점 없음', h('i', null, '✕')));
+
+    var shown = scope.filter(function (b) { return sameRating(b, stat.rating); });
+    $('listTitle').textContent = stat.year === 'none' ? '날짜 없는 책'
+      : stat.month ? stat.year + '년 ' + stat.month + '월에 읽은 책'
+      : stat.year + '년 읽은 책';
+    $('listCount').textContent = shown.length + '권';
+
+    var out = $('statList');
+    out.textContent = '';
+    if (!shown.length) {
+      out.appendChild(h('p', { class: 'stat-note' }, mine.length
+        ? '고른 조건에 맞는 책이 없습니다.'
+        : '아직 기록한 책이 없습니다. 아래 버튼으로 첫 책을 넣어 보세요.'));
+      return;
+    }
+    var groups = [], idx = {};
+    shown.slice().sort(function (a, b) {
+      if (stat.group === 'rating' && a.rating !== b.rating) return b.rating - a.rating;
+      return a.date < b.date ? 1 : a.date > b.date ? -1 : b.createdAt - a.createdAt;
+    }).forEach(function (b) {
+      var key = stat.group === 'rating' ? String(b.rating) : String(monthOf(b));
+      if (!(key in idx)) { idx[key] = groups.length; groups.push({ key: key, items: [] }); }
+      groups[idx[key]].items.push(b);
+    });
+    groups.forEach(function (g) {
+      var title;
+      if (stat.group === 'rating') {
+        var r = Number(g.key);
+        title = r ? h('span', null, starRow(r, 'sm'), ' ', ratingText(r)) : h('span', null, '별점 없음');
+      } else {
+        title = h('span', null, Number(g.key) ? Number(g.key) + '월' : '날짜 없음');
+      }
+      out.appendChild(h('div', { class: 'grp' }, title, h('small', null, g.items.length + '권')));
+      g.items.forEach(function (b) {
+        out.appendChild(h('button', { type: 'button', class: 'mini', onclick: function () { openBookSheet(b); },
+          'aria-label': b.title + ' 기록 열기' },
+          coverEl(b),
+          h('span', null, h('strong', null, b.title), b.author ? h('small', null, b.author) : null),
+          h('span', { class: 'r' },
+            b.rating ? starRow(b.rating, 'sm') : h('small', null, '별점 없음'),
+            h('small', null, b.date ? Number(b.date.slice(5, 7)) + '. ' + Number(b.date.slice(8, 10)) + '.' : ''))));
+      });
+    });
+  }
+
+  function showList() {
+    var sec = $('listSec');
+    var top = sec.getBoundingClientRect().top;
+    if (top > window.innerHeight * 0.7) {
+      try { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch (e) { sec.scrollIntoView(); }
+    }
+  }
+
+  function moveYear(step) {
+    var mine = store.books.filter(function (b) { return b.writer === writer; });
+    var set = {};
+    set[new Date().getFullYear()] = true;
+    mine.forEach(function (b) { if (b.date) set[yearOf(b)] = true; });
+    var years = Object.keys(set).map(Number).sort(function (a, b) { return a - b; });
+    if (stat.year === 'none') { stat.year = years[years.length - 1]; }
+    else {
+      var i = years.indexOf(stat.year) + step;
+      if (i < 0 || i >= years.length) return;
+      stat.year = years[i];
+    }
+    stat.month = 0;
+    stat.rating = null;
+    renderStats();
+  }
+
   /* ---------- 책 기록 시트 ---------- */
   function buildStars() {
     var wrap = $('stars');
     for (var n = 1; n <= 5; n++) {
       (function (n) {
-        wrap.appendChild(h('button', {
-          type: 'button', 'aria-label': '별 ' + n + '개', 'aria-pressed': 'false',
-          onclick: function () { setRating(rating === n ? 0 : n); }
-        }, '★'));
+        var box = h('span', { class: 'star-pick' }, h('span', { class: 'st', 'aria-hidden': 'true' }, h('i')));
+        [n - 0.5, n].forEach(function (v) {
+          box.appendChild(h('button', {
+            type: 'button', 'aria-label': '별 ' + (v % 1 ? v.toFixed(1) : v) + '개', 'aria-pressed': 'false',
+            'data-v': String(v),
+            onclick: function () { setRating(rating === v ? 0 : v); }
+          }));
+        });
+        wrap.appendChild(box);
       })(n);
     }
+    wrap.appendChild(h('span', { class: 'stars-val', id: 'starsVal' }));
   }
   function setRating(n) {
-    rating = n;
-    Array.prototype.forEach.call($('stars').children, function (btn, i) {
-      btn.classList.toggle('on', i < n);
-      btn.setAttribute('aria-pressed', i < n ? 'true' : 'false');
+    rating = cleanRating(n);
+    Array.prototype.forEach.call($('stars').querySelectorAll('.star-pick'), function (box, i) {
+      var fill = rating >= i + 1 ? 100 : rating >= i + 0.5 ? 50 : 0;
+      box.querySelector('.st i').style.width = fill + '%';
     });
+    Array.prototype.forEach.call($('stars').querySelectorAll('button'), function (btn) {
+      btn.setAttribute('aria-pressed', Number(btn.getAttribute('data-v')) === rating ? 'true' : 'false');
+    });
+    var val = $('starsVal');
+    val.textContent = rating ? ratingText(rating) : '별점 없음';
+    val.classList.toggle('none', !rating);
   }
   function isbnValue() { return $('fIsbn').value.replace(/[^0-9Xx]/g, ''); }
 
@@ -1671,8 +2129,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   function openSettings() {
     closeSheets();
-    pick_ = { page: page, key: 'frame' };
-    hsv = hexToHsv(store.themes[writer][page].frame);
+    pick_ = { page: themePage(), key: 'frame' };
+    hsv = hexToHsv(store.themes[writer][themePage()].frame);
     drawPicker();
     drawKakaoNote();
     $('versionText').textContent = VERSION + '. 새 파일을 올렸는데 이 글이 그대로라면 예전 화면이 남아 있는 것이니 새로 고쳐 주세요.';
@@ -2077,7 +2535,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       t.addEventListener('click', function () { setPage(t.getAttribute('data-go')); });
     });
     $('addBtn').addEventListener('click', function () {
-      if (page === 'books') openBookSheet(null);
+      if (page !== 'diary') openBookSheet(null);
       else openDiarySheet(todayEntry());
     });
     $('titleBtn').addEventListener('click', openNameSheet);
@@ -2098,6 +2556,11 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     });
     $('photoOffBtn').addEventListener('click', removePhoto);
     $('filter').addEventListener('input', renderBooks);
+    $('yearPrev').addEventListener('click', function () { moveYear(-1); });
+    $('yearNext').addEventListener('click', function () { moveYear(1); });
+    Array.prototype.forEach.call(document.querySelectorAll('.seg button'), function (b) {
+      b.addEventListener('click', function () { stat.group = b.getAttribute('data-group'); renderStats(); });
+    });
 
     $('seekBtn').addEventListener('click', function () { lastAsked = $('q').value.trim(); findBooks(false); });
     $('q').addEventListener('keydown', function (e) {
