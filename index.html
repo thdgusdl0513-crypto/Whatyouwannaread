@@ -37,7 +37,13 @@
   --prism:linear-gradient(200deg,#a98bff 0%,#6fb2ff 20%,#7fe0b0 40%,#fff27a 58%,#ffb061 76%,#ff86a0 100%);
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;--z:1}
+/* PC처럼 넓은 화면에서는 휴대폰 화면을 비율 그대로 키워서 보여 준다. */
+@media (min-width:760px) and (min-height:560px){ html{--z:1.18} }
+@media (min-width:1024px) and (min-height:680px){ html{--z:1.32} }
+@media (min-width:1440px) and (min-height:820px){ html{--z:1.48} }
+@media (min-width:1900px) and (min-height:1000px){ html{--z:1.7} }
+html{zoom:var(--z)}
 html:has(dialog[open]){overflow:hidden}
 body{
   margin:0;
@@ -46,7 +52,7 @@ body{
   font-family:var(--sans);
   font-size:15px;
   line-height:1.5;
-  min-height:100dvh;
+  min-height:calc(100dvh / var(--z));
   padding:0 0 calc(92px + env(safe-area-inset-bottom,0px));
   -webkit-font-smoothing:antialiased;
 }
@@ -88,7 +94,7 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .paper{
   width:calc(100% - 28px);max-width:480px;margin:0 auto;
   background:var(--paper);
-  min-height:calc(100dvh - 156px);
+  min-height:calc(100dvh / var(--z) - 156px);
   padding:0 22px 26px;
   display:flex;flex-direction:column;
 }
@@ -395,14 +401,14 @@ div.leaf-open{cursor:default}
 /* 시트 */
 dialog.sheet{
   position:fixed;inset:auto 0 0 0;margin:0 auto;
-  width:100%;max-width:508px;max-height:92dvh;
+  width:100%;max-width:508px;max-height:calc(92dvh / var(--z));
   border:0;padding:0;border-radius:2px 2px 0 0;
   background:var(--paper);color:var(--ink);overflow:hidden;
   box-shadow:0 -6px 30px rgba(0,0,0,.28);
 }
 dialog.sheet[open]{display:flex;flex-direction:column;animation:rise .22s ease-out}
 dialog.sheet::backdrop{background:rgba(18,18,24,.62)}
-dialog#setSheet{max-height:76dvh}
+dialog#setSheet{max-height:calc(76dvh / var(--z))}
 dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 @keyframes rise{from{transform:translateY(28px);opacity:.4}to{transform:none;opacity:1}}
 @media (prefers-reduced-motion:reduce){dialog.sheet[open]{animation:none}}
@@ -867,7 +873,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '10월 26일 열세 번째 판';
+  var VERSION = '10월 26일 열네 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
