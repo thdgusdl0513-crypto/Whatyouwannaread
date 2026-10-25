@@ -352,7 +352,7 @@ div.leaf-open{cursor:default}
   box-shadow:0 1px 0 var(--rule),1px 2px 6px rgba(0,0,0,.06);
 }
 .note::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;background:var(--red);opacity:.75}
-.note-to{display:block;font-size:11.5px;font-weight:800;color:var(--ink);opacity:.74}   /* 진회색 */
+.note-to{display:block;font-size:11.5px;font-weight:800;color:var(--note-to,var(--ink))}   /* 하루 일기 배경색 */
 .note-text{
   display:block;margin-top:5px;font-size:14px;font-weight:700;line-height:1.7;
   white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;
@@ -365,7 +365,7 @@ div.leaf-open{cursor:default}
 }
 .note-form{display:flex;align-items:flex-end;gap:10px;margin-top:4px}
 .note-form label{flex:1;min-width:0}
-.note-form b{display:block;font-size:11.5px;font-weight:800;color:var(--ink);opacity:.74;margin-bottom:2px}
+.note-form b{display:block;font-size:11.5px;font-weight:800;color:var(--note-to,var(--ink));margin-bottom:2px}
 .note-form textarea{
   display:block;width:100%;resize:none;overflow:hidden;
   border:0;border-bottom:1.5px solid var(--ink);border-radius:0;background:transparent;
@@ -867,7 +867,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '10월 26일 열두 번째 판';
+  var VERSION = '10월 26일 열세 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -1054,6 +1054,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     s.setProperty('--accent-ink', split ? frameInk : paper);
     s.setProperty('--bar-bg', split ? paper : ink);
     s.setProperty('--bar-ink', split ? ink : paper);
+    // ‘송현에게/유정에게’ 글씨: 하루 일기 배경색. 너무 옅어 안 보이면 같은 색조로 읽힐 만큼만 진하게.
+    var noteTo = frame;
+    for (var k = 1; k <= 10 && contrast(noteTo, paper) < 3.2; k++) noteTo = mix(frame, ink, k / 10);
+    s.setProperty('--note-to', noteTo);
     $('themeColor').setAttribute('content', frame);
   }
 
