@@ -382,18 +382,17 @@ div.leaf-open{cursor:default}
   background:var(--ink);color:var(--paper);font-size:13px;font-weight:700;
 }
 .note-form button:disabled{opacity:.35}
-/* 일기장 표지 */
-.diary-cover{background:var(--paper);margin:0 0 12px;padding:0 26px 22px;color:var(--ink)}
+/* 일기장 표지: 제목 한 줄만 작게 */
+.diary-cover{background:var(--paper);margin:0 0 12px;padding:16px 22px 14px;color:var(--ink)}
 .diary-cover > *{position:relative;z-index:1}
-.diary-cover h1{margin:30px 0 0}
+.diary-cover h1{margin:0}
 .diary-cover h1 button{
   display:block;width:100%;padding:0;border:0;background:none;text-align:left;
-  font-family:var(--serif);font-weight:800;
-  font-size:clamp(23px,6.8vw,28px);line-height:1.4;letter-spacing:-.02em;word-break:keep-all;
+  font-family:var(--serif);font-weight:800;color:var(--note-to,var(--ink));
+  font-size:17px;line-height:1.45;letter-spacing:-.01em;word-break:keep-all;
 }
-.diary-cover h1 button.none{color:var(--ink-faint);font-weight:700}
-.diary-cover .byline{margin-top:11px;font-size:15px}
-.diary-cover .tally{margin-top:16px;font-size:12.5px}
+.diary-cover h1 button.none{color:var(--ink-faint);font-weight:700;font-size:15px}
+.diary-cover .byline{margin:4px 0 0;font-size:11.5px;letter-spacing:.08em;color:var(--ink-soft)}
 .leaves .imprint{margin:22px 0 0;padding:0 2px}
 .leaves .imprint button{color:var(--frame-ink);opacity:.7}
 
@@ -646,10 +645,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   <section class="leaves" id="pageDiary" aria-label="하루 일기" hidden>
     <p class="notice storage-notice" hidden>지금 이 화면에서는 일기가 저장되지 않습니다. GitHub에 올린 주소로 열면 휴대폰에 저장됩니다.</p>
     <header class="diary-cover" id="diaryCover">
-      <p class="series">하루 일기<b id="diaryNo">000</b></p>
       <h1><button type="button" id="diaryTitleBtn"></button></h1>
       <p class="byline" id="diaryByline"></p>
-      <p class="tally" id="diaryTally"></p>
     </header>
     <div id="leafStack"></div>
     <footer class="imprint">
@@ -913,7 +910,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '10월 28일 열다섯 번째 판';
+  var VERSION = '10월 28일 열여섯 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -1521,11 +1518,6 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     btn.classList.toggle('none', !title);
     btn.setAttribute('aria-label', title ? writer + '의 일기장 제목 바꾸기: ' + title : writer + '의 일기장 제목 짓기');
     $('diaryByline').textContent = writer + '의 일기장';
-    $('diaryNo').textContent = pad(mine.length, 3);
-    var last = mine.reduce(function (m, d) { return d.date > m ? d.date : m; }, '');
-    $('diaryTally').textContent = mine.length
-      ? '일기 ' + mine.length + '편, 마지막으로 쓴 날은 ' + dateText(last) + '입니다.'
-      : '아직 쓴 일기가 없습니다.';
   }
 
   function openDiaryTitleSheet() {
