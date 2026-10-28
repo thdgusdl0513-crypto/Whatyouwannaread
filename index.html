@@ -84,8 +84,8 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 }
 
 /* 종이결 */
-.paper,.leaf,.plate{position:relative}
-.paper::after,.leaf::after,.plate::after{
+.paper,.leaf,.plate,.diary-cover{position:relative}
+.paper::after,.leaf::after,.plate::after,.diary-cover::after{
   content:"";position:absolute;inset:0;pointer-events:none;
   background-image:var(--grain);opacity:.13;
 }
@@ -382,6 +382,18 @@ div.leaf-open{cursor:default}
   background:var(--ink);color:var(--paper);font-size:13px;font-weight:700;
 }
 .note-form button:disabled{opacity:.35}
+/* 일기장 표지 */
+.diary-cover{background:var(--paper);margin:0 0 12px;padding:0 26px 22px;color:var(--ink)}
+.diary-cover > *{position:relative;z-index:1}
+.diary-cover h1{margin:30px 0 0}
+.diary-cover h1 button{
+  display:block;width:100%;padding:0;border:0;background:none;text-align:left;
+  font-family:var(--serif);font-weight:800;
+  font-size:clamp(23px,6.8vw,28px);line-height:1.4;letter-spacing:-.02em;word-break:keep-all;
+}
+.diary-cover h1 button.none{color:var(--ink-faint);font-weight:700}
+.diary-cover .byline{margin-top:11px;font-size:15px}
+.diary-cover .tally{margin-top:16px;font-size:12.5px}
 .leaves .imprint{margin:22px 0 0;padding:0 2px}
 .leaves .imprint button{color:var(--frame-ink);opacity:.7}
 
@@ -633,6 +645,12 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   <!-- 다음 장 -->
   <section class="leaves" id="pageDiary" aria-label="하루 일기" hidden>
     <p class="notice storage-notice" hidden>지금 이 화면에서는 일기가 저장되지 않습니다. GitHub에 올린 주소로 열면 휴대폰에 저장됩니다.</p>
+    <header class="diary-cover" id="diaryCover">
+      <p class="series">하루 일기<b id="diaryNo">000</b></p>
+      <h1><button type="button" id="diaryTitleBtn"></button></h1>
+      <p class="byline" id="diaryByline"></p>
+      <p class="tally" id="diaryTally"></p>
+    </header>
     <div id="leafStack"></div>
     <footer class="imprint">
       <button type="button" data-settings>설정과 사용법</button>
@@ -729,6 +747,26 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       <div class="actions">
         <button type="button" class="btn-line warn" id="diaryDeleteBtn" hidden>삭제</button>
         <button type="submit" class="btn-main">일기 저장</button>
+      </div>
+    </form>
+  </div>
+</dialog>
+
+<!-- 일기장 제목 시트 -->
+<dialog class="sheet" id="diaryTitleSheet" aria-labelledby="diaryTitleSheetTitle">
+  <div class="sheet-head">
+    <h2 id="diaryTitleSheetTitle">일기장 제목 짓기</h2>
+    <button type="button" class="sheet-close" data-close>닫기</button>
+  </div>
+  <div class="sheet-body">
+    <form id="diaryTitleForm" novalidate>
+      <div class="field">
+        <label for="dtTitle">일기장 제목</label>
+        <input id="dtTitle" class="big" type="text" maxlength="40" autocomplete="off" placeholder="예: 모든 침묵을 질문으로 바꾸던 날들">
+        <p class="hint">일기 장 맨 위 표지에 들어갑니다. 비워 두고 저장하면 제목이 지워집니다.</p>
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn-main">제목 저장</button>
       </div>
     </form>
   </div>
@@ -846,6 +884,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         <dd>developers.kakao.com 에 카카오 계정으로 들어가 ‘내 애플리케이션’에서 애플리케이션을 하나 만들고, 앱 키 가운데 ‘REST API 키’를 복사해 설정의 ‘책 찾기’에 붙여 넣습니다. 키를 넣으면 다음(Daum) 책 검색으로 찾아 한글 책이 훨씬 잘 나옵니다.</dd>
         <dt>하루 일기</dt>
         <dd>위에서 ‘하루 일기’로 넘긴 뒤 아래 버튼을 누릅니다. 한글과 영어 모두 쓸 수 있고 줄을 바꾼 자리가 그대로 보입니다. 날짜를 바꾸면 지난 날 일기도 쓸 수 있습니다.</dd>
+        <dt>일기장 제목</dt>
+        <dd>하루 일기 장 맨 위 표지의 제목을 누르면 일기장 제목을 지을 수 있습니다. 송현과 유정이 각자 자기 일기장 제목을 따로 가집니다.</dd>
         <dt>서로에게 한마디</dt>
         <dd>일기 아래 ‘송현에게’, ‘유정에게’ 칸에 짧게 적고 ‘남기기’를 누르면 그 일기에 한마디가 붙습니다. 일기는 쓴 사람만 고치고, 한마디는 상대가 남깁니다. ‘지우기’를 두 번 누르면 지워집니다. 시트에서는 ‘송현에게’, ‘유정에게’ 탭에 쌓입니다.</dd>
         <dt>이름 고르기</dt>
@@ -873,7 +913,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '10월 26일 열네 번째 판';
+  var VERSION = '10월 28일 열다섯 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -912,6 +952,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     byline: DEFAULT_BYLINE,
     sign: '',
     themes: defaultThemes(),
+    diaryTitles: {},
     books: [],
     diary: [],
     notes: []
@@ -1088,6 +1129,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
           if (typeof d.byline === 'string') store.byline = d.byline;
           if (typeof d.sign === 'string') store.sign = d.sign;
           store.themes = cleanThemes(d.themes, d.theme);
+          store.diaryTitles = cleanDiaryTitles(d.diaryTitles);
         }
       }
       migrateDefaults();
@@ -1444,6 +1486,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var stack = $('leafStack');
     stack.textContent = '';
     var mine = store.diary.filter(function (d) { return d.writer === writer; });
+    renderDiaryCover(mine);
 
     if (!mine.length) {
       stack.appendChild(h('article', { class: 'leaf' },
@@ -1469,6 +1512,37 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
           h('span', { class: 'leaf-sign' }, '—' + d.writer)),
         notesEl(d, notes)));
     });
+  }
+
+  function renderDiaryCover(mine) {
+    var title = store.diaryTitles[writer] || '';
+    var btn = $('diaryTitleBtn');
+    btn.textContent = title || '일기장 제목을 지어 주세요';
+    btn.classList.toggle('none', !title);
+    btn.setAttribute('aria-label', title ? writer + '의 일기장 제목 바꾸기: ' + title : writer + '의 일기장 제목 짓기');
+    $('diaryByline').textContent = writer + '의 일기장';
+    $('diaryNo').textContent = pad(mine.length, 3);
+    var last = mine.reduce(function (m, d) { return d.date > m ? d.date : m; }, '');
+    $('diaryTally').textContent = mine.length
+      ? '일기 ' + mine.length + '편, 마지막으로 쓴 날은 ' + dateText(last) + '입니다.'
+      : '아직 쓴 일기가 없습니다.';
+  }
+
+  function openDiaryTitleSheet() {
+    closeSheets();
+    $('diaryTitleSheetTitle').textContent = writer + '의 일기장 제목';
+    $('dtTitle').value = store.diaryTitles[writer] || '';
+    $('diaryTitleSheet').showModal();
+  }
+  function submitDiaryTitle(e) {
+    e.preventDefault();
+    var who = writer;
+    store.diaryTitles[who] = str($('dtTitle').value, 40);
+    save();
+    queue(diaryTitleOp(who));
+    renderDiary();
+    $('diaryTitleSheet').close();
+    toast(store.diaryTitles[who] ? '일기장 제목을 저장했습니다.' : '일기장 제목을 지웠습니다.');
   }
 
   /* ---------- 서로에게 한마디 ---------- */
@@ -2233,6 +2307,17 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     };
   }
   // 색은 사람마다 따로 보내서, 한 사람이 바꿔도 다른 사람의 색을 덮어쓰지 않게 한다.
+  function cleanDiaryTitles(t) {
+    var out = {};
+    WRITERS.forEach(function (w) { out[w] = t && typeof t === 'object' ? str(t[w], 40) : ''; });
+    return out;
+  }
+  // 일기장 제목도 사람마다 따로 보내서 서로 덮어쓰지 않게 한다.
+  function diaryTitleOp(w) {
+    var value = {};
+    value['diaryTitle_' + w] = store.diaryTitles[w] || '';
+    return { type: 'settings', action: 'set', value: value };
+  }
   function themeOp(w) {
     var value = {};
     value['theme_' + w] = JSON.stringify(store.themes[w]);
@@ -2415,6 +2500,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       if (!raw) return;
       try { store.themes[w] = cleanTheme(typeof raw === 'string' ? JSON.parse(raw) : raw); } catch (e) {}
     });
+    WRITERS.forEach(function (w) {
+      if (typeof v['diaryTitle_' + w] === 'string') store.diaryTitles[w] = str(v['diaryTitle_' + w], 40);
+    });
     if (!v.title) return false;
     store.title = str(v.title, 40);
     store.byline = str(v.byline, 24);
@@ -2454,6 +2542,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       themesPushed = true;
       WRITERS.forEach(function (w) {
         if (!(d.settings && d.settings['theme_' + w])) sync.outbox.push(themeOp(w));
+        // 시트에 아직 일기장 제목이 없고 휴대폰에 있으면 올린다.
+        if (!(d.settings && typeof d.settings['diaryTitle_' + w] === 'string') && store.diaryTitles[w]) {
+          sync.outbox.push(diaryTitleOp(w));
+        }
       });
     }
     var moved = migrateDefaults();
@@ -2613,7 +2705,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var name = '독서기록_' + today() + '.json';
     var text = JSON.stringify({
       app: 'dokseo-note', version: 3,
-      title: store.title, byline: store.byline, sign: store.sign, themes: store.themes,
+      title: store.title, byline: store.byline, sign: store.sign, themes: store.themes, diaryTitles: store.diaryTitles,
       books: store.books, diary: store.diary, notes: store.notes, photo: photo
     }, null, 2);
     var file;
@@ -2656,6 +2748,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         if (d.themes || d.theme) {
           store.themes = cleanThemes(d.themes, d.theme);
           WRITERS.forEach(function (w) { queue(themeOp(w)); });
+        }
+        if (d.diaryTitles && typeof d.diaryTitles === 'object') {
+          store.diaryTitles = cleanDiaryTitles(d.diaryTitles);
+          WRITERS.forEach(function (w) { queue(diaryTitleOp(w)); });
         }
         if (typeof d.photo === 'string' && /^data:image\//.test(d.photo)) {
           photo = d.photo;
@@ -2735,6 +2831,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     $('diaryForm').addEventListener('submit', submitDiary);
     $('diaryDeleteBtn').addEventListener('click', function () { armOrGo(this, deleteDiary); });
     $('nameForm').addEventListener('submit', submitName);
+    $('diaryTitleBtn').addEventListener('click', openDiaryTitleSheet);
+    $('diaryTitleForm').addEventListener('submit', submitDiaryTitle);
 
     $('syncBtn').addEventListener('click', openSyncSheet);
     $('openSyncBtn').addEventListener('click', openSyncSheet);
