@@ -76,7 +76,57 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
   color:var(--frame-ink);opacity:.55;white-space:nowrap;
 }
 .tab[aria-current="page"]{opacity:1;border-bottom-color:var(--frame-ink)}
-.tab-side{margin-left:auto;display:flex;gap:14px}
+.tab-side{margin-left:auto;display:flex;align-items:center;gap:13px}
+/* 받은 한마디 종 */
+.tab-side button.bell{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:30px;height:30px;padding:0;text-decoration:none;opacity:.9;
+}
+.bell svg{width:19px;height:19px;stroke:currentColor;fill:none;stroke-width:1.7}
+.bell i{
+  position:absolute;top:0;right:-3px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:#c8402c;color:#fff;font-style:normal;font-size:10px;font-weight:700;line-height:16px;text-align:center;
+  box-shadow:0 0 0 1.5px var(--frame);
+}
+.bell.ring svg{animation:ring .9s ease-in-out 2}
+@keyframes ring{0%,100%{transform:rotate(0)}20%{transform:rotate(14deg)}40%{transform:rotate(-12deg)}60%{transform:rotate(8deg)}80%{transform:rotate(-5deg)}}
+@media (prefers-reduced-motion:reduce){.bell.ring svg{animation:none}}
+/* 위에서 내려오는 알림 */
+.alarm{
+  position:fixed;left:50%;top:calc(58px + env(safe-area-inset-top,0px));z-index:15;
+  width:calc(100% - 28px);max-width:480px;transform:translate(-50%,-14px);opacity:0;pointer-events:none;
+  transition:transform .25s ease,opacity .25s ease;
+}
+.alarm.show{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+@media (prefers-reduced-motion:reduce){.alarm{transition:none}}
+.alarm button{
+  display:block;width:100%;text-align:left;border:0;border-radius:2px;cursor:pointer;
+  background:var(--paper);color:var(--ink);padding:12px 14px 12px 17px;position:relative;
+  box-shadow:0 6px 22px rgba(0,0,0,.24);font-family:var(--serif);
+}
+.alarm button::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:2px;background:var(--note-to,var(--red))}
+.alarm b{display:block;font-size:12px;font-weight:800;color:var(--note-to,var(--ink))}
+.alarm span{display:block;margin-top:3px;font-size:14px;font-weight:700;line-height:1.55;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:keep-all}
+.alarm small{display:block;margin-top:5px;font-family:var(--sans);font-size:11.5px;color:var(--ink-soft)}
+/* 받은 한마디 목록 */
+.inbox{list-style:none;margin:0;padding:0}
+.inbox li + li{border-top:1px solid var(--rule)}
+.inbox button{display:block;width:100%;border:0;background:none;text-align:left;padding:13px 0 12px;font-family:var(--serif)}
+.inbox b{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:800;color:var(--ink-soft)}
+.inbox b em{font-style:normal;color:#c8402c;font-family:var(--sans);font-size:11px}
+.inbox span{display:block;margin-top:4px;font-size:15px;font-weight:700;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
+.inbox small{display:block;margin-top:4px;font-family:var(--sans);font-size:11.5px;color:var(--ink-faint)}
+.who{display:flex;gap:8px;margin-top:4px}
+.who button{
+  flex:1;height:44px;border:1.5px solid var(--rule);border-radius:2px;background:none;
+  font-family:var(--serif);font-weight:800;font-size:15px;
+}
+.who button[aria-pressed="true"]{border-color:var(--ink);background:var(--paper-hi)}
+.note.new{box-shadow:0 0 0 1.5px var(--note-to,var(--red)),1px 2px 8px rgba(0,0,0,.1)}
+.note.new .note-to::after{content:"새 한마디";margin-left:7px;font-family:var(--sans);font-size:10px;font-weight:700;color:#c8402c}
+.note.flash{animation:flash 1.6s ease}
+@keyframes flash{0%,60%{background:var(--paper)}100%{background:var(--paper-hi)}}
 .tab-side button{
   border:0;background:none;padding:6px 0;white-space:nowrap;
   font-size:11.5px;color:var(--frame-ink);opacity:.84;
@@ -562,6 +612,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     <div class="tab-side">
       <button type="button" id="syncBtn">시트 연결</button>
       <button type="button" data-settings>설정</button>
+      <button type="button" class="bell" id="bellBtn" aria-label="받은 한마디">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2H4.4z"/><path d="M10 20.5a2.1 2.1 0 0 0 4 0"/></svg>
+        <i id="bellCount" hidden></i>
+      </button>
     </div>
   </div>
 </nav>
@@ -827,6 +881,12 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   </div>
   <div class="sheet-body">
     <section class="set">
+      <h3>이 휴대폰은 누구 것인가요</h3>
+      <p class="sheet-note">고른 사람에게 온 한마디를 위쪽 종과 알림으로 알려 드립니다. 휴대폰마다 따로 정합니다.</p>
+      <div class="who" id="whoSet"></div>
+    </section>
+
+    <section class="set">
       <h3>색 바꾸기</h3>
       <p class="sheet-note" id="colorNote"></p>
       <div class="targets" id="targets"></div>
@@ -881,6 +941,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         <dd>developers.kakao.com 에 카카오 계정으로 들어가 ‘내 애플리케이션’에서 애플리케이션을 하나 만들고, 앱 키 가운데 ‘REST API 키’를 복사해 설정의 ‘책 찾기’에 붙여 넣습니다. 키를 넣으면 다음(Daum) 책 검색으로 찾아 한글 책이 훨씬 잘 나옵니다.</dd>
         <dt>하루 일기</dt>
         <dd>위에서 ‘하루 일기’로 넘긴 뒤 아래 버튼을 누릅니다. 한글과 영어 모두 쓸 수 있고 줄을 바꾼 자리가 그대로 보입니다. 날짜를 바꾸면 지난 날 일기도 쓸 수 있습니다.</dd>
+        <dt>한마디 알림</dt>
+        <dd>설정에서 이 휴대폰이 누구 것인지 고르면, 상대가 내 일기에 한마디를 남겼을 때 위쪽 종에 숫자가 붙고 알림이 잠깐 내려옵니다. 종을 누르면 받은 한마디를 모아 보고, 하나를 누르면 그 일기로 갑니다. 앱이 열려 있는 동안 1분마다 새 한마디를 확인합니다.</dd>
         <dt>일기장 제목</dt>
         <dd>하루 일기 장 맨 위 표지의 제목을 누르면 일기장 제목을 지을 수 있습니다. 송현과 유정이 각자 자기 일기장 제목을 따로 가집니다.</dd>
         <dt>서로에게 한마디</dt>
@@ -905,16 +967,36 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 <input type="file" id="photoFile" accept="image/*" hidden>
 <div id="toast" role="status" aria-live="polite"></div>
+<div class="alarm" id="alarm" role="status" aria-live="polite"><button type="button" id="alarmBtn"><b id="alarmWho"></b><span id="alarmText"></span><small>눌러서 일기에서 보기</small></button></div>
+
+<!-- 받은 한마디 시트 -->
+<dialog class="sheet" id="inboxSheet" aria-labelledby="inboxSheetTitle">
+  <div class="sheet-head">
+    <h2 id="inboxSheetTitle">받은 한마디</h2>
+    <button type="button" class="sheet-close" data-close>닫기</button>
+  </div>
+  <div class="sheet-body">
+    <div id="whoAsk" hidden>
+      <p class="sheet-note">알림을 받으려면 이 휴대폰이 누구 것인지 한 번만 골라 주세요. 그 사람에게 온 한마디를 알려 드립니다.</p>
+      <div class="who" id="whoAskBtns"></div>
+    </div>
+    <p class="sheet-note" id="inboxNote"></p>
+    <ul class="inbox" id="inboxList"></ul>
+  </div>
+</dialog>
 
 <script>
 (function () {
   'use strict';
 
-  var VERSION = '10월 28일 열여섯 번째 판';
+  var VERSION = '11월 2일 열일곱 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
   var PHOTO_KEY = KEY + '-photo';
+  var ME_KEY = KEY + '-me';
+  var SEEN_KEY = KEY + '-seen';
+  var DRAFT_KEY = KEY + '-drafts';
   var KAKAO_KEY = KEY + '-kakao';
   var KYOBO_SEARCH = 'https://search.kyobobook.co.kr/search?keyword=';
   var KYOBO_COVER = 'https://contents.kyobobook.co.kr/sih/fit-in/';
@@ -956,6 +1038,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   };
   var sync = { url: '', password: '', outbox: [], last: 0 };
   var photo = '';
+  var me = '';                 // 이 휴대폰 주인
+  var seen = {};               // 이미 본 한마디 ID
+  var drafts = {};             // 일기마다 적다가 둔 한마디
   var kakaoKey = '';
   var persistent = true;
   var page = 'books';
@@ -1139,6 +1224,11 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       }
       var p = localStorage.getItem(PHOTO_KEY) || '';
       if (/^data:image\//.test(p)) photo = p;
+      var m_ = localStorage.getItem(ME_KEY);
+      if (WRITERS.indexOf(m_) !== -1) me = m_;
+      (JSON.parse(localStorage.getItem(SEEN_KEY) || '[]') || []).forEach(function (id) { seen[id] = true; });
+      var dr = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}');
+      if (dr && typeof dr === 'object') Object.keys(dr).forEach(function (k) { if (typeof dr[k] === 'string') drafts[k] = dr[k].slice(0, 300); });
       kakaoKey = str(localStorage.getItem(KAKAO_KEY), 80);
       var savedPage = localStorage.getItem(PAGE_KEY);
       if (savedPage === 'diary' || savedPage === 'stats') page = savedPage;
@@ -1475,7 +1565,29 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     updateBarLabel();
   }
 
+  var seenTimer;
   function renderDiary() {
+    // 다시 그려도 적던 칸과 커서를 지킨다.
+    var act = document.activeElement, focusId = null, selS = 0, selE = 0;
+    if (act && act.tagName === 'TEXTAREA' && act.getAttribute('data-diary')) {
+      focusId = act.getAttribute('data-diary'); selS = act.selectionStart; selE = act.selectionEnd;
+    }
+    renderDiaryBody();
+    if (focusId) {
+      var again = document.querySelector('textarea[data-diary="' + focusId + '"]');
+      if (again) { again.focus({ preventScroll: true }); try { again.setSelectionRange(selS, selE); } catch (e) {} }
+    }
+    updateBell(false);
+    clearTimeout(seenTimer);
+    if (page === 'diary' && me && writer === me && document.visibilityState === 'visible') {
+      seenTimer = setTimeout(function () {
+        var shown = unreadNotes().filter(function (n) { return n.to === writer; });
+        if (shown.length && page === 'diary' && writer === me) markSeen(shown);
+      }, 4000);
+    }
+  }
+
+  function renderDiaryBody() {
     Array.prototype.forEach.call($('writers').children, function (b) {
       b.setAttribute('aria-pressed', b.getAttribute('data-writer') === writer ? 'true' : 'false');
     });
@@ -1547,6 +1659,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     return (d.getMonth() + 1) + '. ' + d.getDate() + '. ' + pad(d.getHours(), 2) + ':' + pad(d.getMinutes(), 2);
   }
 
+  function saveDrafts() {
+    try { localStorage.setItem(DRAFT_KEY, JSON.stringify(drafts)); } catch (e) {}
+  }
+
   function notesEl(d, notes) {
     var to = d.writer, from = otherOf(to);
     var wrap = h('section', { class: 'notes', 'aria-label': to + '에게 남긴 한마디' });
@@ -1554,27 +1670,47 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     notes.forEach(function (n) {
       var del = h('button', { type: 'button' }, '지우기');
       del.addEventListener('click', function () { armOrGo(del, function () { deleteNote(n.id); }); });
-      wrap.appendChild(h('div', { class: 'note' },
+      wrap.appendChild(h('div', { class: 'note' + (isUnread(n) ? ' new' : ''), 'data-note': n.id },
         h('span', { class: 'note-to' }, n.to + '에게'),
         h('span', { class: 'note-text' }, n.text),
         h('div', { class: 'note-foot' }, h('span', null, '—' + n.from + ', ' + shortTime(n.createdAt)), del)));
     });
 
-    var area = h('textarea', { rows: '1', maxlength: '300', placeholder: from + iGa(from) + ' 남기는 한마디', 'aria-label': to + '에게 한마디' });
-    var send = h('button', { type: 'submit', disabled: true }, '남기기');
-    var grow = function () {
+    var area = h('textarea', { rows: '1', maxlength: '300', placeholder: from + iGa(from) + ' 남기는 한마디', 'aria-label': to + '에게 한마디', 'data-diary': d.id });
+    area.value = drafts[d.id] || '';
+    // 버튼은 늘 켜 둔다. 한글 자판은 기기에 따라 글자를 적어도 알려 주지 않을 때가 있다.
+    var send = h('button', { type: 'submit' }, '남기기');
+    var composing = false;
+    var keep = function () {
+      if (!area.isConnected) return;     // 이미 화면에서 빠진 칸은 저장하지 않는다
       area.style.height = 'auto';
       area.style.height = Math.min(area.scrollHeight, 160) + 'px';
-      send.disabled = !area.value.trim();
+      if (area.value) drafts[d.id] = area.value; else delete drafts[d.id];
+      saveDrafts();
     };
-    area.addEventListener('input', grow);
+    ['input', 'keyup', 'change', 'compositionend', 'blur'].forEach(function (n) { area.addEventListener(n, keep); });
+    area.addEventListener('compositionstart', function () { composing = true; });
+    area.addEventListener('compositionend', function () { composing = false; });
+    // 컴퓨터에서는 Enter로 남기고, Shift+Enter로 줄을 바꾼다.
+    area.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' && !e.shiftKey && !composing && !e.isComposing && window.matchMedia('(hover:hover)').matches) {
+        e.preventDefault();
+        submitNote();
+      }
+    });
     var form = h('form', { class: 'note-form', novalidate: true },
       h('label', null, h('b', null, to + '에게'), area), send);
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-      addNote(d, area.value);
-    });
+    var submitNote = function () {
+      var text = area.value;
+      if (!text.trim()) { toast('한마디를 적어 주세요.'); area.focus(); return; }
+      area.value = '';
+      delete drafts[d.id];
+      saveDrafts();
+      addNote(d, text);
+    };
+    form.addEventListener('submit', function (e) { e.preventDefault(); submitNote(); });
     wrap.appendChild(form);
+    setTimeout(keep, 0);
     return wrap;
   }
 
@@ -1585,10 +1721,136 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     });
     if (!note) { toast('한마디를 적어 주세요.'); return; }
     store.notes.push(note);
+    seen[note.id] = true;           // 내가 남긴 것은 알림에서 뺀다
+    saveSeen();
+    delete drafts[d.id];
+    saveDrafts();
     save();
     queue({ type: 'note', action: 'upsert', record: note });
     renderDiary();
-    toast(note.to + '에게 한마디를 남겼습니다.');
+    toast(sync.url ? note.to + '에게 한마디를 남겼습니다.' : note.to + '에게 한마디를 남겼습니다. 시트에 연결하면 상대에게도 보입니다.');
+  }
+
+  /* ---------- 받은 한마디 알림 ---------- */
+  function saveSeen() {
+    var ids = Object.keys(seen).slice(-800);
+    try { localStorage.setItem(SEEN_KEY, JSON.stringify(ids)); } catch (e) {}
+  }
+  function isUnread(n) { return !!me && n.to === me && n.from !== me && !seen[n.id]; }
+  function unreadNotes() {
+    return store.notes.filter(isUnread).sort(function (a, b) { return b.createdAt - a.createdAt; });
+  }
+  function markSeen(list) {
+    var changed = false;
+    list.forEach(function (n) { if (!seen[n.id]) { seen[n.id] = true; changed = true; } });
+    if (changed) { saveSeen(); updateBell(); }
+  }
+
+  var lastAlarmIds = null;
+  function updateBell(fresh) {
+    var un = unreadNotes();
+    var c = $('bellCount');
+    c.hidden = !un.length;
+    c.textContent = un.length > 9 ? '9+' : String(un.length);
+    $('bellBtn').setAttribute('aria-label', un.length ? '받은 한마디, 새 한마디 ' + un.length + '개' : '받은 한마디');
+    // 새로 들어온 것이 있으면 위에 알림을 띄운다.
+    var ids = un.map(function (n) { return n.id; });
+    if (lastAlarmIds === null) {
+      // 앱을 처음 열 때 한 번: 읽지 않은 한마디가 있으면 알려 준다.
+      if (fresh !== true) return;
+      if (un.length) showAlarm(un[0], un.length);
+      lastAlarmIds = ids;
+      return;
+    }
+    var newcomers = un.filter(function (n) { return lastAlarmIds.indexOf(n.id) === -1; });
+    if (newcomers.length) showAlarm(newcomers[0], newcomers.length);
+    lastAlarmIds = ids;
+  }
+
+  var alarmTimer, alarmNote = null;
+  function showAlarm(n, count) {
+    alarmNote = n;
+    $('alarmWho').textContent = n.from + iGa(n.from) + ' ' + n.to + '에게 한마디를 남겼어요' + (count > 1 ? ' (새 한마디 ' + count + '개)' : '');
+    $('alarmText').textContent = n.text;
+    var el = $('alarm');
+    el.classList.add('show');
+    $('bellBtn').classList.remove('ring');
+    void $('bellBtn').offsetWidth;
+    $('bellBtn').classList.add('ring');
+    clearTimeout(alarmTimer);
+    alarmTimer = setTimeout(function () { el.classList.remove('show'); }, 7000);
+  }
+  function hideAlarm() { clearTimeout(alarmTimer); $('alarm').classList.remove('show'); }
+
+  // 한마디가 달린 일기로 가서 보여 준다.
+  function goToNote(n) {
+    hideAlarm();
+    closeSheets();
+    if (writer !== n.to) setWriter(n.to);
+    setPage('diary', true);
+    setTimeout(function () {
+      var el = document.querySelector('[data-note="' + n.id + '"]');
+      if (!el) return;
+      el.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      el.classList.add('flash');
+      setTimeout(function () { markSeen([n]); renderDiary(); }, 1800);
+    }, 60);
+  }
+
+  function setMe(name) {
+    var first = !me;
+    me = WRITERS.indexOf(name) !== -1 ? name : '';
+    try { localStorage.setItem(ME_KEY, me); } catch (e) {}
+    // 처음 고를 때는 그동안 쌓인 것도 알려 주되, 내가 남긴 것은 뺀다.
+    if (first) lastAlarmIds = [];
+    drawWho();
+    updateBell(false);
+    renderDiary();
+  }
+  function drawWho() {
+    ['whoSet', 'whoAskBtns'].forEach(function (id) {
+      var wrap = $(id);
+      if (!wrap.children.length) {
+        WRITERS.forEach(function (w) {
+          wrap.appendChild(h('button', { type: 'button', 'data-me': w, onclick: function () {
+            setMe(w);
+            if (id === 'whoAskBtns') drawInbox();
+          } }, w));
+        });
+      }
+      Array.prototype.forEach.call(wrap.children, function (b) {
+        b.setAttribute('aria-pressed', b.getAttribute('data-me') === me ? 'true' : 'false');
+      });
+    });
+  }
+
+  function drawInbox() {
+    $('whoAsk').hidden = !!me;
+    var list = $('inboxList');
+    list.textContent = '';
+    if (!me) { $('inboxNote').textContent = ''; return; }
+    var mine = store.notes.filter(function (n) { return n.to === me && n.from !== me; })
+      .sort(function (a, b) { return b.createdAt - a.createdAt; }).slice(0, 40);
+    var un = mine.filter(isUnread).length;
+    $('inboxNote').textContent = !mine.length
+      ? me + '에게 온 한마디가 아직 없습니다.' + (sync.url ? '' : ' 시트에 연결해야 상대가 남긴 한마디가 이 휴대폰에 옵니다.')
+      : (un ? '새 한마디 ' + un + '개를 포함해 ' : '') + me + '에게 온 한마디 ' + mine.length + '개입니다. 누르면 그 일기로 갑니다.';
+    mine.forEach(function (n) {
+      var diary = store.diary[findById(store.diary, n.diaryId)];
+      list.appendChild(h('li', null, h('button', { type: 'button', onclick: function () { goToNote(n); } },
+        h('b', null, h('span', null, n.from + iGa(n.from) + ' ' + n.to + '에게'), isUnread(n) ? h('em', null, '새 한마디') : null),
+        h('span', null, n.text),
+        h('small', null, (diary ? dayText(diary.date) + ' 일기에, ' : '') + shortTime(n.createdAt)))));
+    });
+  }
+  function openInbox() {
+    hideAlarm();
+    closeSheets();
+    drawWho();
+    drawInbox();
+    $('inboxSheet').showModal();
+    // 목록을 열어 본 순간 모두 읽은 것으로 한다(표시는 이번에 열린 목록에 남는다).
+    if (me) markSeen(unreadNotes());
   }
 
   function deleteNote(id) {
@@ -2350,6 +2612,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   }
 
   function openSettings() {
+    drawWho();
     closeSheets();
     pick_ = { page: themePage(), key: 'frame' };
     hsv = hexToHsv(store.themes[writer][themePage()].frame);
@@ -2465,6 +2728,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   }
 
   /* ---------- 구글 시트와 맞추기 ---------- */
+  var oldScript = false, oldScriptWarned = false;
   var syncing = false, syncAgain = false, syncState = 'idle', syncTimer, settingsPushed = false, themesPushed = false;
 
   function queue(op) {
@@ -2528,6 +2792,13 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       store.diary = diary;
       // 예전 Apps Script는 한마디를 돌려주지 않으므로, 그때는 휴대폰에 있는 것을 그대로 둔다.
       if (Array.isArray(d.notes)) store.notes = d.notes.map(cleanNote).filter(Boolean);
+    }
+    oldScript = !Array.isArray(d.notes);
+    if (oldScript && !oldScriptWarned && store.notes.length) {
+      oldScriptWarned = true;
+      setTimeout(function () {
+        toast('시트의 Apps Script가 예전 판이라 한마디가 시트에 저장되지 않습니다. Code.gs를 새 버전으로 다시 배포해 주세요.');
+      }, 1200);
     }
     var had = adoptSettings(d.settings);
     if (!themesPushed) {
@@ -2839,6 +3110,14 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     // 열 때, 다시 돌아올 때, 인터넷이 돌아올 때 시트와 맞춘다.
     if (sync.url) syncNow();
     window.addEventListener('online', function () { syncNow(); });
+    // 앱이 열려 있는 동안 1분마다 새 한마디를 확인한다.
+    setInterval(function () {
+      if (sync.url && document.visibilityState === 'visible' && Date.now() - sync.last > 50000) syncNow();
+    }, 60000);
+    $('bellBtn').addEventListener('click', openInbox);
+    $('alarmBtn').addEventListener('click', function () { if (alarmNote) goToNote(alarmNote); });
+    drawWho();
+    updateBell(true);
     document.addEventListener('visibilitychange', function () {
       if (document.visibilityState === 'visible' && sync.url &&
           (sync.outbox.length || Date.now() - sync.last > 60000)) syncNow();
