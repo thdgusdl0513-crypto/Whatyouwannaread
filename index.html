@@ -606,6 +606,48 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 .howto dt:first-child{margin-top:0}
 .howto dd{margin:0;font-size:13px;line-height:1.7;color:var(--ink-soft);word-break:keep-all}
 
+/* 글씨체: 제목과 본문을 따로 */
+.head h1 button,.entry-title,.diary-cover h1 button,.stat-head h1,.year h2,.mini strong,.stat-sec > h2,.grp{font-family:var(--title-font,var(--serif))}
+.head h1 button{font-size:calc(clamp(25px,7.5vw,32px) * var(--ts,1))}
+.entry-title{font-size:calc(17px * var(--ts,1))}
+.diary-cover h1 button{font-size:calc(17px * var(--ts,1))}
+.stat-head h1{font-size:calc(clamp(25px,7.5vw,30px) * var(--ts,1))}
+.year h2{font-size:calc(18px * var(--ts,1))}
+.mini strong{font-size:calc(14.5px * var(--ts,1))}
+.entry-review,.empty,.leaf-open,.notes,.note-form textarea,.field textarea,.alarm span,.inbox span{font-family:var(--body-font,var(--serif))}
+.entry-review{font-size:calc(15px * var(--bs,1))}
+.leaf-text{font-size:calc(14.5px * var(--bs,1))}
+.note-text{font-size:calc(14px * var(--bs,1))}
+.seg2{display:flex;border:1.5px solid var(--ink);border-radius:2px;overflow:hidden;margin-bottom:12px}
+.seg2 button{flex:1;border:0;background:none;padding:9px 0;font-size:13.5px}
+.seg2 button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:700}
+.fontgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px}
+.fontcard{
+  position:relative;display:block;width:100%;min-height:66px;padding:9px 10px 8px;text-align:left;
+  border:1.5px solid var(--rule);border-radius:2px;background:none;overflow:hidden;
+}
+.fontcard[aria-pressed="true"]{border-color:var(--ink);background:var(--paper-hi)}
+.fontcard b{display:block;font-weight:400;font-size:17px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fontcard span{display:block;margin-top:3px;font-size:13px;line-height:1.35;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fontcard em{position:absolute;right:6px;top:5px;font-style:normal;font-family:var(--sans);font-size:10px;color:var(--ink-faint)}
+.fontcard .x{position:absolute;right:2px;bottom:2px;width:24px;height:24px;line-height:24px;text-align:center;font-family:var(--sans);font-size:13px;color:var(--ink-faint)}
+.size-row{display:flex;align-items:center;gap:12px;margin-top:14px}
+.size-row label{flex:none;min-width:84px;font-size:13px}
+.size-row label b{font-weight:700}
+.size-row input{flex:1;accent-color:var(--ink)}
+.font-preview{margin:12px 0 0;padding:12px 14px;background:var(--paper-hi);border-radius:2px;word-break:keep-all;overflow-wrap:anywhere}
+.font-preview b{display:block;font-weight:800;line-height:1.4}
+.font-preview span{display:block;margin-top:6px;line-height:1.7}
+.more{margin-top:16px;border-top:1px solid var(--rule);padding-top:10px}
+.more summary{cursor:pointer;font-size:13.5px;font-weight:700;padding:6px 0}
+.more .row{display:flex;gap:8px;margin-top:8px}
+.more .row input{
+  flex:1;min-width:0;height:42px;padding:0 10px;border:1.5px solid var(--ink);border-radius:2px;background:transparent;font-size:16px;
+}
+.more .row button{flex:none;height:42px;padding:0 14px;border:0;border-radius:2px;background:var(--ink);color:var(--paper);font-size:13px;font-weight:700}
+.more p{margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--ink-soft);word-break:keep-all}
+.more a{color:var(--ink)}
+
 #toast{
   position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:20;
   transform:translateX(-50%);max-width:calc(100% - 40px);
@@ -912,6 +954,34 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     </section>
 
     <section class="set">
+      <h3>글씨체</h3>
+      <p class="sheet-note" id="fontNote"></p>
+      <div class="seg2" id="fontTarget" role="group" aria-label="바꿀 글씨">
+        <button type="button" data-ft="title" aria-pressed="true">제목</button>
+        <button type="button" data-ft="body" aria-pressed="false">본문</button>
+      </div>
+      <div class="fontgrid" id="fontGrid"></div>
+      <div class="size-row">
+        <label for="fontSize" id="fontSizeLabel">크기</label>
+        <input type="range" id="fontSize" step="1">
+        <button type="button" class="text-btn" id="fontReset">기본</button>
+      </div>
+      <div class="font-preview" id="fontPreview"><b>나의 외로움이 나를 이겨낼 수 있는 힘이 되었다.</b><span>오늘은 비가 왔다. It rained all day, and I liked it.</span></div>
+      <details class="more" id="fontMore">
+        <summary>다른 글꼴 가져오기</summary>
+        <div class="row">
+          <input id="gfName" type="text" placeholder="구글 폰트 이름 (예: Hi Melody)" autocomplete="off" autocapitalize="off" spellcheck="false">
+          <button type="button" id="gfAdd">추가</button>
+        </div>
+        <p><a href="https://fonts.google.com/?subset=korean" target="_blank" rel="noopener">fonts.google.com</a>에서 마음에 드는 글꼴을 찾아 영어 이름을 그대로 적어 주세요. 상대 휴대폰에도 전해집니다.</p>
+        <div class="row">
+          <button type="button" id="fileFontBtn" style="flex:1">내 글꼴 파일 올리기 (.ttf .otf .woff2)</button>
+        </div>
+        <p>눈누 같은 곳에서 받은 글꼴 파일을 올릴 수 있습니다. 파일은 이 휴대폰에만 저장되어, 상대 휴대폰에서는 기본 글씨체로 보입니다.</p>
+      </details>
+    </section>
+
+    <section class="set">
       <h3>색 바꾸기</h3>
       <p class="sheet-note" id="colorNote"></p>
       <div class="targets" id="targets"></div>
@@ -970,6 +1040,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         <dd>위쪽 ‘시트 저장됨’을 누르면 ‘연결 점검’이 나옵니다. 두 휴대폰의 연결 번호가 같은지, 상대 휴대폰이 최근에 연결했는지, 시트의 Apps Script가 새 판인지 한눈에 볼 수 있습니다. 빨간 표시가 있는 줄의 안내를 따라 주세요.</dd>
         <dt>한마디 알림</dt>
         <dd>설정에서 이 휴대폰이 누구 것인지 고르면, 상대가 내 일기에 한마디를 남겼을 때 위쪽 종에 숫자가 붙고 알림이 잠깐 내려옵니다. 종을 누르면 받은 한마디를 모아 보고, 하나를 누르면 그 일기로 갑니다. 앱이 열려 있는 동안 1분마다 새 한마디를 확인합니다.</dd>
+        <dt>글씨체</dt>
+        <dd>설정의 ‘글씨체’에서 제목과 본문을 따로 골라 글꼴과 크기를 바꿀 수 있습니다. 색처럼 송현과 유정이 각자 따로 정합니다. ‘다른 글꼴 가져오기’에서 구글 폰트 이름을 적거나 글꼴 파일을 올려 더할 수도 있습니다.</dd>
         <dt>일기장 제목</dt>
         <dd>하루 일기 장 맨 위 표지의 제목을 누르면 일기장 제목을 지을 수 있습니다. 송현과 유정이 각자 자기 일기장 제목을 따로 가집니다.</dd>
         <dt>서로에게 한마디</dt>
@@ -993,6 +1065,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 <input type="file" id="photoFile" accept="image/*" hidden>
+<input type="file" id="fontFile" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" hidden>
 <div id="toast" role="status" aria-live="polite"></div>
 <div class="alarm" id="alarm" role="status" aria-live="polite"><button type="button" id="alarmBtn"><b id="alarmWho"></b><span id="alarmText"></span><small>눌러서 일기에서 보기</small></button></div>
 
@@ -1016,7 +1089,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '11월 5일 열아홉 번째 판';
+  var VERSION = '11월 6일 스무 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -1033,6 +1106,26 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   // 기록하는 사람. 구글 시트의 탭 이름에 들어갑니다. Code.gs 의 WRITERS 와 같아야 합니다.
   var WRITERS = ['송현', '유정'];
   var WRITER_KEY = 'dokseo-note-v1-writer';
+
+  // 고를 수 있는 글꼴(구글 폰트). [이름, 구글 폰트 이름, 굵기]
+  var FONT_LIST = [
+    ['나눔명조', 'Nanum Myeongjo', '400;700;800'], ['노토 명조', 'Noto Serif KR', '400;700;900'],
+    ['고운바탕', 'Gowun Batang', '400;700'], ['송명', 'Song Myung', '400'], ['함렛', 'Hahmlet', '400;700;800'],
+    ['노토 고딕', 'Noto Sans KR', '400;700;900'], ['나눔고딕', 'Nanum Gothic', '400;700;800'],
+    ['고운돋움', 'Gowun Dodum', '400'], ['IBM 플렉스', 'IBM Plex Sans KR', '400;700'], ['고딕 A1', 'Gothic A1', '400;700;800'],
+    ['나눔 손글씨 펜', 'Nanum Pen Script', '400'], ['나눔 손글씨 붓', 'Nanum Brush Script', '400'],
+    ['개구쟁이', 'Gaegu', '400;700'], ['하이멜로디', 'Hi Melody', '400'], ['감자꽃', 'Gamja Flower', '400'],
+    ['푸어스토리', 'Poor Story', '400'], ['싱글데이', 'Single Day', '400'], ['연성', 'Yeon Sung', '400'],
+    ['주아', 'Jua', '400'], ['도현', 'Do Hyeon', '400'], ['동글', 'Dongle', '400;700'], ['해바라기', 'Sunflower', '300;500;700'],
+    ['스타일리시', 'Stylish', '400'], ['구기', 'Gugi', '400'], ['독도', 'Dokdo', '400'], ['동해독도', 'East Sea Dokdo', '400'],
+    ['기랑해랑', 'Kirang Haerang', '400'], ['귀여운 글씨', 'Cute Font', '400'], ['검은고딕', 'Black Han Sans', '400'],
+    ['오르빗', 'Orbit', '400'], ['디필레이아', 'Diphylleia', '400']
+  ];
+  var FONT_SIZE = {   // 슬라이더 기준(px)과 범위
+    title: { base: 32, min: 20, max: 46, what: '표지 제목' },
+    body: { base: 15, min: 11, max: 24, what: '본문' }
+  };
+  var FONT_DB = 'dokseo-note-fonts';
 
   var DEFAULT_TITLE = '나의 외로움이 나를 이겨낼 수 있는 힘이 되었다.';
   var DEFAULT_BYLINE = '독서기록';
@@ -1060,6 +1153,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     sign: '',
     themes: defaultThemes(),
     diaryTitles: {},
+    fonts: {},
     books: [],
     diary: [],
     notes: []
@@ -1217,6 +1311,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     for (var k = 1; k <= 10 && contrast(noteTo, paper) < 3.2; k++) noteTo = mix(frame, ink, k / 10);
     s.setProperty('--note-to', noteTo);
     $('themeColor').setAttribute('content', frame);
+    applyFonts();
   }
 
   /* ---------- 휴대폰 저장 ---------- */
@@ -1241,6 +1336,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
           if (typeof d.sign === 'string') store.sign = d.sign;
           store.themes = cleanThemes(d.themes, d.theme);
           store.diaryTitles = cleanDiaryTitles(d.diaryTitles);
+          store.fonts = cleanFontsAll(d.fonts);
         }
       }
       migrateDefaults();
@@ -2628,6 +2724,273 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     };
   }
   // 색은 사람마다 따로 보내서, 한 사람이 바꿔도 다른 사람의 색을 덮어쓰지 않게 한다.
+  /* ---------- 글씨체 ---------- */
+  // 사람마다 { title: {f, s}, body: {f, s}, extra: [구글 폰트 이름...] }
+  // f: '' 기본 / 'g:구글 폰트 이름' / 'u:올린 파일 ID',  s: 0 기본 / 글자 크기(px)
+  function cleanFontPart(p, kind) {
+    var f = p && typeof p.f === 'string' ? p.f.slice(0, 80) : '';
+    if (f && !/^(g|u):./.test(f)) f = '';
+    var size = Number(p && p.s) || 0;
+    var lim = FONT_SIZE[kind];
+    if (size) size = Math.max(lim.min, Math.min(lim.max, Math.round(size)));
+    return { f: f, s: size };
+  }
+  function cleanFonts(t) {
+    t = t && typeof t === 'object' ? t : {};
+    var extra = Array.isArray(t.extra) ? t.extra.map(function (x) { return gfName(x); }).filter(Boolean).slice(0, 20) : [];
+    return { title: cleanFontPart(t.title, 'title'), body: cleanFontPart(t.body, 'body'), extra: extra };
+  }
+  function cleanFontsAll(t) {
+    var out = {};
+    WRITERS.forEach(function (w) { out[w] = cleanFonts(t && t[w]); });
+    return out;
+  }
+  function gfName(x) {
+    x = String(x == null ? '' : x).trim().replace(/\s+/g, ' ');
+    return /^[A-Za-z0-9 ]{2,60}$/.test(x) ? x : '';
+  }
+  function fontsOf(w) {
+    if (!store.fonts[w]) store.fonts[w] = cleanFonts(null);
+    return store.fonts[w];
+  }
+  function fontOp(w) {
+    var value = {};
+    value['font_' + w] = JSON.stringify(fontsOf(w));
+    return { type: 'settings', action: 'set', value: value };
+  }
+  function isDefaultFonts(t) {
+    return !t.title.f && !t.title.s && !t.body.f && !t.body.s && !t.extra.length;
+  }
+
+  var loadedFonts = {}, previewFonts = {}, uploaded = {};   // uploaded: id -> 이름
+  function gfWeights(name) {
+    for (var i = 0; i < FONT_LIST.length; i++) if (FONT_LIST[i][1] === name) return FONT_LIST[i][2];
+    return '';
+  }
+  function addCss(href) {
+    var l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = href;
+    document.head.appendChild(l);
+    return l;
+  }
+  function loadGoogleFont(name) {
+    if (!name || loadedFonts[name] || name === 'Nanum Myeongjo') return;
+    loadedFonts[name] = true;
+    var w = gfWeights(name);
+    addCss('https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name).replace(/%20/g, '+') +
+      (w ? ':wght@' + w : '') + '&display=swap');
+  }
+  // 설정의 글꼴 고르기 칸에서만 쓰는 가벼운 미리보기(필요한 글자만 받는다)
+  function loadPreviewFont(name, text) {
+    if (!name || loadedFonts[name] || previewFonts[name]) return;
+    previewFonts[name] = true;
+    addCss('https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name).replace(/%20/g, '+') +
+      '&text=' + encodeURIComponent(text) + '&display=swap');
+  }
+  function familyOf(f) {
+    if (!f) return '';
+    if (f.slice(0, 2) === 'g:') { loadGoogleFont(f.slice(2)); return "'" + f.slice(2) + "'"; }
+    if (f.slice(0, 2) === 'u:' && uploaded[f.slice(2)]) return "'U" + f.slice(2) + "'";
+    return '';
+  }
+  function applyFonts() {
+    var t = fontsOf(writer), st = document.body.style;
+    var tf = familyOf(t.title.f), bf = familyOf(t.body.f);
+    st.setProperty('--title-font', tf ? tf + ', var(--serif)' : 'var(--serif)');
+    st.setProperty('--body-font', bf ? bf + ', var(--serif)' : 'var(--serif)');
+    st.setProperty('--ts', t.title.s ? String(t.title.s / FONT_SIZE.title.base) : '1');
+    st.setProperty('--bs', t.body.s ? String(t.body.s / FONT_SIZE.body.base) : '1');
+  }
+
+  // 올린 글꼴 파일은 이 휴대폰의 IndexedDB에 둔다(용량이 커서 일반 저장소에는 넣지 않는다).
+  function fontDb() {
+    return new Promise(function (resolve, reject) {
+      if (!window.indexedDB) { reject(new Error('no-idb')); return; }
+      var req = indexedDB.open(FONT_DB, 1);
+      req.onupgradeneeded = function () { req.result.createObjectStore('fonts', { keyPath: 'id' }); };
+      req.onsuccess = function () { resolve(req.result); };
+      req.onerror = function () { reject(req.error); };
+    });
+  }
+  function dbAll() {
+    return fontDb().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var q = db.transaction('fonts', 'readonly').objectStore('fonts').getAll();
+        q.onsuccess = function () { resolve(q.result || []); };
+        q.onerror = function () { reject(q.error); };
+      });
+    });
+  }
+  function dbPut(rec) {
+    return fontDb().then(function (db) {
+      return new Promise(function (resolve, reject) {
+        var tx = db.transaction('fonts', 'readwrite');
+        tx.objectStore('fonts').put(rec);
+        tx.oncomplete = function () { resolve(); };
+        tx.onerror = function () { reject(tx.error); };
+      });
+    });
+  }
+  function dbDel(id) {
+    return fontDb().then(function (db) {
+      return new Promise(function (resolve) {
+        var tx = db.transaction('fonts', 'readwrite');
+        tx.objectStore('fonts').delete(id);
+        tx.oncomplete = tx.onerror = function () { resolve(); };
+      });
+    });
+  }
+  function registerUploaded(rec) {
+    if (typeof FontFace !== 'function') return Promise.reject(new Error('no-fontface'));
+    var face = new FontFace('U' + rec.id, rec.data);
+    return face.load().then(function (f) {
+      document.fonts.add(f);
+      uploaded[rec.id] = rec.name;
+    });
+  }
+  function loadUploadedFonts() {
+    return dbAll().then(function (list) {
+      return Promise.all(list.map(function (r) { return registerUploaded(r).catch(function () {}); }));
+    }).catch(function () {}).then(function () {
+      applyFonts();
+      if ($('setSheet').open) drawFontPicker();
+    });
+  }
+
+  // 설정 화면의 글씨체 칸
+  var fontTarget = 'title';
+  var PREVIEW_TEXT = '오늘의 문장 한 줄 Aa';
+  function drawFontPicker() {
+    var t = fontsOf(writer), part = t[fontTarget], lim = FONT_SIZE[fontTarget];
+    $('fontNote').textContent = '‘' + writer + '’의 글씨체입니다. 제목과 본문을 따로 고를 수 있습니다.';
+    Array.prototype.forEach.call($('fontTarget').children, function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-ft') === fontTarget ? 'true' : 'false');
+    });
+    var grid = $('fontGrid');
+    grid.textContent = '';
+    var card = function (key, label, family, tag, onRemove) {
+      var b = h('button', { type: 'button', class: 'fontcard', 'aria-pressed': part.f === key ? 'true' : 'false',
+        onclick: function () { setFont(key); } },
+        h('b', null, label), h('span', null, PREVIEW_TEXT), tag ? h('em', null, tag) : null);
+      b.style.fontFamily = family ? family + ', var(--serif)' : 'var(--serif)';
+      if (onRemove) {
+        var x = h('span', { class: 'x', role: 'button', 'aria-label': label + ' 빼기', title: '빼기' }, '✕');
+        x.addEventListener('click', function (e) { e.stopPropagation(); onRemove(); });
+        b.appendChild(x);
+      }
+      grid.appendChild(b);
+    };
+    card('', '기본 (나눔명조)', '', null);
+    FONT_LIST.forEach(function (f) {
+      if (f[1] === 'Nanum Myeongjo') return;
+      loadPreviewFont(f[1], f[0] + PREVIEW_TEXT);
+      card('g:' + f[1], f[0], "'" + f[1] + "'", null);
+    });
+    t.extra.forEach(function (name) {
+      loadGoogleFont(name);
+      card('g:' + name, name, "'" + name + "'", '가져옴', function () { removeExtra(name); });
+    });
+    Object.keys(uploaded).forEach(function (id) {
+      card('u:' + id, uploaded[id], "'U" + id + "'", '내 파일', function () { removeUploaded(id); });
+    });
+    if (part.f.slice(0, 2) === 'u:' && !uploaded[part.f.slice(2)]) {
+      grid.appendChild(h('p', { class: 'hint', style: 'grid-column:1/-1;margin:4px 0 0;font-size:12px;color:var(--ink-soft)' },
+        '고른 글꼴 파일이 이 휴대폰에 없어 기본 글씨체로 보입니다. 같은 파일을 이 휴대폰에도 올려 주세요.'));
+    }
+    var range = $('fontSize');
+    range.min = lim.min; range.max = lim.max;
+    range.value = part.s || lim.base;
+    $('fontSizeLabel').innerHTML = '';
+    $('fontSizeLabel').appendChild(document.createTextNode('크기 '));
+    $('fontSizeLabel').appendChild(h('b', null, (part.s || lim.base) + 'px'));
+    $('fontSize').setAttribute('aria-label', lim.what + ' 크기');
+    var pv = $('fontPreview');
+    pv.firstChild.style.fontFamily = 'var(--title-font)';
+    pv.firstChild.style.fontSize = 'calc(20px * var(--ts,1))';
+    pv.lastChild.style.fontFamily = 'var(--body-font)';
+    pv.lastChild.style.fontSize = 'calc(15px * var(--bs,1))';
+  }
+  var fontTimer;
+  function fontsChanged() {
+    applyFonts();
+    drawFontPicker();
+    // 바로 보낼 목록에 올린다. 늦게 올리면 그 사이 도착한 시트 응답이 방금 바꾼 값을 덮어쓴다.
+    save();
+    queue(fontOp(writer));
+  }
+  function setFont(key) {
+    fontsOf(writer)[fontTarget].f = key;
+    fontsChanged();
+  }
+  function setFontSize(px) {
+    var lim = FONT_SIZE[fontTarget];
+    px = Math.round(Number(px));
+    fontsOf(writer)[fontTarget].s = px === lim.base ? 0 : px;
+    fontsChanged();
+  }
+  function resetFontPart() {
+    fontsOf(writer)[fontTarget] = { f: '', s: 0 };
+    fontsChanged();
+  }
+  function addGoogleFont() {
+    var name = gfName($('gfName').value);
+    if (!name) { toast('구글 폰트의 영어 이름을 적어 주세요. 예: Hi Melody'); return; }
+    var t = fontsOf(writer);
+    var known = FONT_LIST.some(function (f) { return f[1].toLowerCase() === name.toLowerCase(); });
+    if (known) {
+      var hit = FONT_LIST.filter(function (f) { return f[1].toLowerCase() === name.toLowerCase(); })[0];
+      setFont('g:' + hit[1]);
+      toast('이미 목록에 있는 글꼴이라 바로 골랐습니다.');
+      return;
+    }
+    $('gfAdd').disabled = true;
+    loadGoogleFont(name);
+    var probe = document.fonts && document.fonts.load ? document.fonts.load("16px '" + name + "'", '가A') : Promise.resolve([]);
+    var timeout = new Promise(function (r) { setTimeout(function () { r(null); }, 6000); });
+    Promise.race([probe, timeout]).then(function (faces) {
+      $('gfAdd').disabled = false;
+      if (!faces || !faces.length) {
+        toast('‘' + name + '’ 글꼴을 찾지 못했습니다. 구글 폰트에 적힌 이름 그대로인지 확인해 주세요.');
+        return;
+      }
+      if (t.extra.indexOf(name) === -1) t.extra.push(name);
+      $('gfName').value = '';
+      setFont('g:' + name);
+      toast('‘' + name + '’ 글꼴을 더했습니다.');
+    }, function () { $('gfAdd').disabled = false; toast('글꼴을 불러오지 못했습니다.'); });
+  }
+  function removeExtra(name) {
+    var t = fontsOf(writer);
+    t.extra = t.extra.filter(function (x) { return x !== name; });
+    ['title', 'body'].forEach(function (k) { if (t[k].f === 'g:' + name) t[k].f = ''; });
+    fontsChanged();
+  }
+  function uploadFont(file) {
+    if (file.size > 15 * 1024 * 1024) { toast('15MB보다 큰 글꼴 파일은 올릴 수 없습니다.'); return; }
+    var reader = new FileReader();
+    reader.onload = function () {
+      var rec = { id: Date.now().toString(36), name: file.name.replace(/\.(ttf|otf|woff2?|)$/i, '').slice(0, 40) || '내 글꼴', data: reader.result };
+      registerUploaded(rec).then(function () {
+        return dbPut(rec).catch(function () { toast('글꼴을 저장하지 못해 이번에만 쓸 수 있습니다.'); });
+      }).then(function () {
+        setFont('u:' + rec.id);
+        toast('‘' + rec.name + '’ 글꼴을 더했습니다.');
+      }, function () { toast('이 파일은 글꼴로 읽을 수 없습니다. .ttf .otf .woff .woff2 파일을 올려 주세요.'); });
+    };
+    reader.onerror = function () { toast('파일을 읽지 못했습니다.'); };
+    reader.readAsArrayBuffer(file);
+  }
+  function removeUploaded(id) {
+    delete uploaded[id];
+    dbDel(id);
+    WRITERS.forEach(function (w) {
+      var t = fontsOf(w);
+      ['title', 'body'].forEach(function (k) { if (t[k].f === 'u:' + id) t[k].f = ''; });
+    });
+    fontsChanged();
+  }
+
   function cleanDiaryTitles(t) {
     var out = {};
     WRITERS.forEach(function (w) { out[w] = t && typeof t === 'object' ? str(t[w], 40) : ''; });
@@ -2680,6 +3043,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   function openSettings() {
     drawWho();
+    drawFontPicker();
     closeSheets();
     pick_ = { page: themePage(), key: 'frame' };
     hsv = hexToHsv(store.themes[writer][themePage()].frame);
@@ -2720,8 +3084,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     store.themes[who][pick_.page][pick_.key] = hex;
     applyTheme();
     drawPicker();
-    clearTimeout(themeTimer);
-    themeTimer = setTimeout(function () { save(); queue(themeOp(who)); }, 700);
+    save();
+    queue(themeOp(who));
   }
   function setColor(hex) { hsv = hexToHsv(hex); commitColor(hex); }
 
@@ -2827,6 +3191,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     });
     WRITERS.forEach(function (w) {
       if (typeof v['diaryTitle_' + w] === 'string') store.diaryTitles[w] = str(v['diaryTitle_' + w], 40);
+      if (v['font_' + w]) {
+        try { store.fonts[w] = cleanFonts(typeof v['font_' + w] === 'string' ? JSON.parse(v['font_' + w]) : v['font_' + w]); } catch (e) {}
+      }
     });
     if (!v.title) return false;
     store.title = str(v.title, 40);
@@ -2892,6 +3259,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       themesPushed = true;
       WRITERS.forEach(function (w) {
         if (!(d.settings && d.settings['theme_' + w])) sync.outbox.push(themeOp(w));
+        if (!(d.settings && d.settings['font_' + w]) && !isDefaultFonts(fontsOf(w))) sync.outbox.push(fontOp(w));
         // 시트에 아직 일기장 제목이 없고 휴대폰에 있으면 올린다.
         if (!(d.settings && typeof d.settings['diaryTitle_' + w] === 'string') && store.diaryTitles[w]) {
           sync.outbox.push(diaryTitleOp(w));
@@ -3139,7 +3507,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var name = '독서기록_' + today() + '.json';
     var text = JSON.stringify({
       app: 'dokseo-note', version: 3,
-      title: store.title, byline: store.byline, sign: store.sign, themes: store.themes, diaryTitles: store.diaryTitles,
+      title: store.title, byline: store.byline, sign: store.sign, themes: store.themes, diaryTitles: store.diaryTitles, fonts: store.fonts,
       books: store.books, diary: store.diary, notes: store.notes, photo: photo
     }, null, 2);
     var file;
@@ -3182,6 +3550,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         if (d.themes || d.theme) {
           store.themes = cleanThemes(d.themes, d.theme);
           WRITERS.forEach(function (w) { queue(themeOp(w)); });
+        }
+        if (d.fonts && typeof d.fonts === 'object') {
+          store.fonts = cleanFontsAll(d.fonts);
+          WRITERS.forEach(function (w) { queue(fontOp(w)); });
         }
         if (d.diaryTitles && typeof d.diaryTitles === 'object') {
           store.diaryTitles = cleanDiaryTitles(d.diaryTitles);
@@ -3286,6 +3658,19 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       if (sync.url && document.visibilityState === 'visible' && Date.now() - sync.last > 50000) syncNow();
     }, 60000);
     $('bellBtn').addEventListener('click', openInbox);
+    Array.prototype.forEach.call($('fontTarget').children, function (b) {
+      b.addEventListener('click', function () { fontTarget = b.getAttribute('data-ft'); drawFontPicker(); });
+    });
+    $('fontSize').addEventListener('input', function () { setFontSize(this.value); });
+    $('fontReset').addEventListener('click', resetFontPart);
+    $('gfAdd').addEventListener('click', addGoogleFont);
+    $('gfName').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addGoogleFont(); } });
+    $('fileFontBtn').addEventListener('click', function () { $('fontFile').click(); });
+    $('fontFile').addEventListener('change', function () {
+      if (this.files && this.files[0]) uploadFont(this.files[0]);
+      this.value = '';
+    });
+    loadUploadedFonts();
     $('mailSaveBtn').addEventListener('click', saveMail);
     $('warnBand').addEventListener('click', openSyncSheet);
     $('warnBand').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSyncSheet(); } });
