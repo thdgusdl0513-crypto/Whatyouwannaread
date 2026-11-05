@@ -117,6 +117,20 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .inbox b em{font-style:normal;color:#c8402c;font-family:var(--sans);font-size:11px}
 .inbox span{display:block;margin-top:4px;font-size:15px;font-weight:700;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
 .inbox small{display:block;margin-top:4px;font-family:var(--sans);font-size:11.5px;color:var(--ink-faint)}
+.diag{list-style:none;margin:0 0 18px;padding:12px 14px;background:var(--paper-hi);border-radius:2px}
+.diag li{display:flex;gap:10px;padding:7px 0;font-size:13px;line-height:1.55;word-break:keep-all}
+.diag li + li{border-top:1px solid var(--rule)}
+.diag i{flex:none;width:18px;font-style:normal;font-weight:700;text-align:center}
+.diag li.ok i{color:#3d7a3a}
+.diag li.bad i{color:#c8402c}
+.diag li.bad{color:var(--ink)}
+.diag small{display:block;color:var(--ink-soft);font-size:12px}
+.diag-title{margin:0 0 8px;font-size:12px;font-weight:700;color:var(--ink-soft)}
+.warnband{
+  margin:0 0 12px;padding:11px 14px;border-radius:2px;background:#c8402c;color:#fff;
+  font-size:13px;line-height:1.6;word-break:keep-all;cursor:pointer;
+}
+.warnband u{text-underline-offset:2px}
 .who{display:flex;gap:8px;margin-top:4px}
 .who button{
   flex:1;height:44px;border:1.5px solid var(--rule);border-radius:2px;background:none;
@@ -702,6 +716,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       <h1><button type="button" id="diaryTitleBtn"></button></h1>
       <p class="byline" id="diaryByline"></p>
     </header>
+    <div class="warnband" id="warnBand" hidden role="button" tabindex="0"></div>
     <div id="leafStack"></div>
     <footer class="imprint">
       <button type="button" data-settings>설정과 사용법</button>
@@ -854,6 +869,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   </div>
   <div class="sheet-body">
     <p class="sheet-note" id="syncNote"></p>
+    <div id="diagWrap" hidden>
+      <p class="diag-title">연결 점검</p>
+      <ul class="diag" id="diag"></ul>
+    </div>
     <form id="syncForm" novalidate>
       <div class="field">
         <label for="sUrl">웹앱 주소</label>
@@ -884,6 +903,12 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       <h3>이 휴대폰은 누구 것인가요</h3>
       <p class="sheet-note">고른 사람에게 온 한마디를 위쪽 종과 알림으로 알려 드립니다. 휴대폰마다 따로 정합니다.</p>
       <div class="who" id="whoSet"></div>
+      <div class="field" id="mailField" hidden style="margin-top:16px">
+        <label for="mailInput" id="mailLabel">한마디 메일 알림</label>
+        <input id="mailInput" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="비워 두면 메일을 보내지 않습니다">
+        <p class="hint">앱을 닫아 두어도, 상대가 내 일기에 한마디를 남기면 이 주소로 메일이 갑니다. 시트에 연결되어 있어야 하고, 주소는 시트의 ‘설정’ 탭에 저장됩니다.</p>
+        <button type="button" class="text-btn" id="mailSaveBtn">메일 주소 저장</button>
+      </div>
     </section>
 
     <section class="set">
@@ -941,6 +966,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         <dd>developers.kakao.com 에 카카오 계정으로 들어가 ‘내 애플리케이션’에서 애플리케이션을 하나 만들고, 앱 키 가운데 ‘REST API 키’를 복사해 설정의 ‘책 찾기’에 붙여 넣습니다. 키를 넣으면 다음(Daum) 책 검색으로 찾아 한글 책이 훨씬 잘 나옵니다.</dd>
         <dt>하루 일기</dt>
         <dd>위에서 ‘하루 일기’로 넘긴 뒤 아래 버튼을 누릅니다. 한글과 영어 모두 쓸 수 있고 줄을 바꾼 자리가 그대로 보입니다. 날짜를 바꾸면 지난 날 일기도 쓸 수 있습니다.</dd>
+        <dt>한마디가 상대에게 안 보일 때</dt>
+        <dd>위쪽 ‘시트 저장됨’을 누르면 ‘연결 점검’이 나옵니다. 두 휴대폰의 연결 번호가 같은지, 상대 휴대폰이 최근에 연결했는지, 시트의 Apps Script가 새 판인지 한눈에 볼 수 있습니다. 빨간 표시가 있는 줄의 안내를 따라 주세요.</dd>
         <dt>한마디 알림</dt>
         <dd>설정에서 이 휴대폰이 누구 것인지 고르면, 상대가 내 일기에 한마디를 남겼을 때 위쪽 종에 숫자가 붙고 알림이 잠깐 내려옵니다. 종을 누르면 받은 한마디를 모아 보고, 하나를 누르면 그 일기로 갑니다. 앱이 열려 있는 동안 1분마다 새 한마디를 확인합니다.</dd>
         <dt>일기장 제목</dt>
@@ -989,7 +1016,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '11월 2일 열일곱 번째 판';
+  var VERSION = '11월 5일 열아홉 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -997,6 +1024,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   var ME_KEY = KEY + '-me';
   var SEEN_KEY = KEY + '-seen';
   var DRAFT_KEY = KEY + '-drafts';
+  var CONF_KEY = KEY + '-notes-on-sheet';
   var KAKAO_KEY = KEY + '-kakao';
   var KYOBO_SEARCH = 'https://search.kyobobook.co.kr/search?keyword=';
   var KYOBO_COVER = 'https://contents.kyobobook.co.kr/sih/fit-in/';
@@ -1041,6 +1069,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   var me = '';                 // 이 휴대폰 주인
   var seen = {};               // 이미 본 한마디 ID
   var drafts = {};             // 일기마다 적다가 둔 한마디
+  var onSheet = {};            // 시트에 들어간 것을 한 번이라도 확인한 한마디 ID
   var kakaoKey = '';
   var persistent = true;
   var page = 'books';
@@ -1227,6 +1256,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       var m_ = localStorage.getItem(ME_KEY);
       if (WRITERS.indexOf(m_) !== -1) me = m_;
       (JSON.parse(localStorage.getItem(SEEN_KEY) || '[]') || []).forEach(function (id) { seen[id] = true; });
+      (JSON.parse(localStorage.getItem(CONF_KEY) || '[]') || []).forEach(function (id) { onSheet[id] = true; });
       var dr = JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}');
       if (dr && typeof dr === 'object') Object.keys(dr).forEach(function (k) { if (typeof dr[k] === 'string') drafts[k] = dr[k].slice(0, 300); });
       kakaoKey = str(localStorage.getItem(KAKAO_KEY), 80);
@@ -1587,7 +1617,21 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     }
   }
 
+  function drawWarnBand() {
+    var band = $('warnBand'), msg = '';
+    if (!sync.url) {
+      if (store.notes.length) msg = '시트에 연결되어 있지 않아 한마디가 이 휴대폰에만 남아 있습니다. <u>시트 연결</u>을 눌러 주세요.';
+    } else if (serverInfo && !serverInfo.hasNotes) {
+      msg = '시트의 Apps Script가 예전 판이라 한마디가 상대에게 가지 않습니다. <u>연결 점검</u>을 눌러 안내를 따라 주세요.';
+    } else if (syncState === 'fail') {
+      msg = '시트에 닿지 않아 한마디를 주고받지 못하고 있습니다. <u>연결 점검</u>을 눌러 주세요.';
+    }
+    band.hidden = !msg;
+    band.innerHTML = msg;
+  }
+
   function renderDiaryBody() {
+    drawWarnBand();
     Array.prototype.forEach.call($('writers').children, function (b) {
       b.setAttribute('aria-pressed', b.getAttribute('data-writer') === writer ? 'true' : 'false');
     });
@@ -1803,11 +1847,34 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     try { localStorage.setItem(ME_KEY, me); } catch (e) {}
     // 처음 고를 때는 그동안 쌓인 것도 알려 주되, 내가 남긴 것은 뺀다.
     if (first) lastAlarmIds = [];
+    lastBeat = 0;
+    if (sync.url) { clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 300); }
     drawWho();
     updateBell(false);
     renderDiary();
   }
+  function drawMail() {
+    var f = $('mailField');
+    f.hidden = !me;
+    if (!me) return;
+    $('mailLabel').textContent = me + '에게 온 한마디를 메일로 받기';
+    var cur = serverInfo && serverInfo.settings ? serverInfo.settings['email_' + me] || '' : '';
+    if (document.activeElement !== $('mailInput')) $('mailInput').value = cur;
+  }
+  function saveMail() {
+    if (!me) return;
+    var v = $('mailInput').value.trim();
+    if (v && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { toast('메일 주소를 다시 확인해 주세요.'); return; }
+    if (!sync.url) { toast('시트에 먼저 연결해 주세요. 메일은 시트를 거쳐 보냅니다.'); return; }
+    var value = {};
+    value['email_' + me] = v;
+    if (serverInfo) serverInfo.settings['email_' + me] = v;
+    queue({ type: 'settings', action: 'set', value: value });
+    toast(v ? '메일 주소를 저장했습니다. Apps Script에서 testMail을 한 번 실행해 권한을 허용해 주세요.' : '메일 알림을 껐습니다.');
+  }
+
   function drawWho() {
+    drawMail();
     ['whoSet', 'whoAskBtns'].forEach(function (id) {
       var wrap = $(id);
       if (!wrap.children.length) {
@@ -2729,6 +2796,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   /* ---------- 구글 시트와 맞추기 ---------- */
   var oldScript = false, oldScriptWarned = false;
+  var serverInfo = null;       // 마지막으로 시트에서 받은 상태(점검용)
+  var lastBeat = 0;
   var syncing = false, syncAgain = false, syncState = 'idle', syncTimer, settingsPushed = false, themesPushed = false;
 
   function queue(op) {
@@ -2781,6 +2850,24 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     }
   }
 
+  // 시트에서 받은 한마디로 맞추되, 이 휴대폰에만 있고 시트에 들어간 적이 없는 한마디는
+  // (예전 판 Apps Script가 버렸거나 보내다 끊긴 것) 지우지 않고 다시 보낸다.
+  function adoptNotes(list) {
+    var fromSheet = list.map(cleanNote).filter(Boolean);
+    var ids = {};
+    fromSheet.forEach(function (n) { ids[n.id] = true; onSheet[n.id] = true; });
+    var pending = {};
+    sync.outbox.forEach(function (op) {
+      if (op && op.type === 'note') pending[op.action === 'delete' ? op.id : op.record && op.record.id] = true;
+    });
+    var lost = store.notes.filter(function (n) { return !ids[n.id] && !onSheet[n.id] && !pending[n.id]; });
+    lost.forEach(function (n) { sync.outbox.push({ type: 'note', action: 'upsert', record: n }); });
+    if (lost.length) resent += lost.length;
+    store.notes = fromSheet;
+    try { localStorage.setItem(CONF_KEY, JSON.stringify(Object.keys(onSheet).slice(-1500))); } catch (e) {}
+  }
+  var resent = 0;
+
   function adoptServer(d) {
     var books = (d.books || []).map(cleanBook).filter(Boolean);
     var diary = (d.diary || []).map(cleanDiary).filter(Boolean);
@@ -2791,7 +2878,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       store.books = books;
       store.diary = diary;
       // 예전 Apps Script는 한마디를 돌려주지 않으므로, 그때는 휴대폰에 있는 것을 그대로 둔다.
-      if (Array.isArray(d.notes)) store.notes = d.notes.map(cleanNote).filter(Boolean);
+      if (Array.isArray(d.notes)) adoptNotes(d.notes);
     }
     oldScript = !Array.isArray(d.notes);
     if (oldScript && !oldScriptWarned && store.notes.length) {
@@ -2843,18 +2930,28 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     syncing = true;
     syncState = 'busy';
     updateSyncLabel();
+    var beat = beatOp();
+    if (beat) sync.outbox.push(beat);
     var sent = sync.outbox.length;
 
     return post({ password: sync.password, ops: sync.outbox.slice(0, sent) }).then(function (d) {
-      if (!d || !d.ok) return { ok: false, code: (d && d.error) || 'network' };
+      if (!d || !d.ok) { if (beat) lastBeat = 0; return { ok: false, code: (d && d.error) || 'network' }; }
       sync.outbox = sync.outbox.slice(sent);
       sync.last = Date.now();
+      serverInfo = {
+        version: Number(d.version) || 0,
+        hasNotes: Array.isArray(d.notes),
+        notes: Array.isArray(d.notes) ? d.notes.length : 0,
+        settings: d.settings || {},
+        at: Date.now()
+      };
       adoptServer(d);
       sync.outbox.forEach(applyLocal);
       saveSync();
       save();
       syncState = 'ok';
       if (sync.outbox.length) syncAgain = true;
+      if (resent) { var r_ = resent; resent = 0; setTimeout(function () { toast('시트에 빠져 있던 한마디 ' + r_ + '개를 다시 보냈습니다.'); }, 600); }
       render();
       if ($('setSheet').open) drawPicker();
       return { ok: true };
@@ -2868,7 +2965,32 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     });
   }
 
+  // 웹앱 주소에서 짧은 연결 번호를 만든다. 두 휴대폰의 번호가 같으면 같은 시트에 연결된 것이다.
+  function connCode(url) {
+    var x = 5381;
+    for (var i = 0; i < url.length; i++) x = ((x * 33) ^ url.charCodeAt(i)) >>> 0;
+    return x.toString(36).toUpperCase().slice(-4);
+  }
+
+  // 이 휴대폰이 언제 어떤 판으로 연결했는지 시트에 남긴다(10분에 한 번).
+  function beatOp() {
+    if (!me || !sync.url) return null;
+    var mine = readBeat(me);
+    var stale = !mine || mine.c !== connCode(sync.url) || mine.v !== VERSION;
+    if (!stale && Date.now() - lastBeat < 600000) return null;
+    lastBeat = Date.now();
+    var value = {};
+    value['seen_' + me] = JSON.stringify({ v: VERSION, t: Date.now(), c: connCode(sync.url) });
+    return { type: 'settings', action: 'set', value: value };
+  }
+  function readBeat(w) {
+    var raw = serverInfo && serverInfo.settings && serverInfo.settings['seen_' + w];
+    if (!raw) return null;
+    try { var o = JSON.parse(raw); return o && o.t ? o : null; } catch (e) { return null; }
+  }
+
   function updateSyncLabel() {
+    if ($('warnBand')) drawWarnBand();
     var label;
     if (!sync.url) label = '시트 연결';
     else if (syncState === 'busy') label = '보내는 중';
@@ -2901,7 +3023,56 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         (sync.outbox.length ? ' 아직 보내지 못한 기록이 ' + sync.outbox.length + '건 있습니다.' : '');
     }
     $('syncNote').textContent = note;
+    drawDiag();
     $('syncSheet').showModal();
+    // 열 때 한 번 맞춰서 최신 상태로 다시 보여 준다.
+    if (sync.url) syncNow().then(function () { if ($('syncSheet').open) drawDiag(); });
+  }
+
+  function drawDiag() {
+    var wrap = $('diagWrap'), ul = $('diag');
+    wrap.hidden = !sync.url;
+    ul.textContent = '';
+    if (!sync.url) return;
+    var row = function (ok, main, sub) {
+      ul.appendChild(h('li', { class: ok === true ? 'ok' : ok === false ? 'bad' : '' },
+        h('i', null, ok === true ? '✓' : ok === false ? '!' : '·'),
+        h('div', null, main, sub ? h('small', null, sub) : null)));
+    };
+    var code = connCode(sync.url);
+    row(null, '이 휴대폰의 연결 번호: ' + code, '두 휴대폰의 연결 번호가 같아야 같은 시트를 함께 씁니다. 다르면 웹앱 주소를 똑같이 다시 적어 주세요.');
+    row(!!me, me ? '이 휴대폰 주인: ' + me : '이 휴대폰 주인을 아직 고르지 않았습니다.',
+      me ? null : '설정 맨 위 ‘이 휴대폰은 누구 것인가요’에서 골라야 알림이 옵니다.');
+    if (!serverInfo) {
+      row(syncState === 'fail' ? false : null, syncState === 'fail' ? '지금 시트에 닿지 않습니다.' : '아직 시트와 맞추지 않았습니다.',
+        '아래 ‘시트와 맞추기’를 눌러 주세요.');
+      return;
+    }
+    if (!serverInfo.hasNotes) {
+      row(false, '시트의 Apps Script가 예전 판입니다.',
+        '그래서 한마디가 시트에 저장되지 않고 상대에게 가지 않습니다. 새 Code.gs를 붙여 넣고 배포 관리에서 기존 배포를 ‘새 버전’으로 수정해 주세요.');
+    } else if (serverInfo.version < 4) {
+      row(true, '한마디는 시트에 저장되고 있습니다. (시트에 ' + serverInfo.notes + '개)',
+        '새 Code.gs로 다시 배포하면 메일 알림도 쓸 수 있습니다.');
+    } else {
+      row(true, 'Apps Script가 새 판입니다. 한마디가 시트에 저장되고 있습니다. (시트에 ' + serverInfo.notes + '개)');
+    }
+    WRITERS.forEach(function (w) {
+      if (w === me) return;
+      var b = readBeat(w);
+      if (!b) {
+        row(false, w + ' 휴대폰이 이 시트에 연결한 기록이 없습니다.',
+          w + ' 휴대폰에서 새로 고침해 ‘' + VERSION + '’이 열렸는지 확인하고, 같은 웹앱 주소로 연결한 뒤 설정에서 ‘이 휴대폰은 누구 것인가요’를 ' + w + '(으)로 골라 주세요.');
+        return;
+      }
+      var same = b.c === code, fresh = b.v === VERSION;
+      row(same && fresh, w + ' 휴대폰 마지막 연결: ' + timeText(b.t),
+        (same ? '연결 번호 ' + b.c + ' (같음)' : '연결 번호가 ' + b.c + '로 다릅니다. 같은 웹앱 주소로 다시 연결해 주세요.') +
+        (fresh ? '' : ' · ' + w + ' 휴대폰은 ‘' + b.v + '’을 열고 있습니다. 새로 고침해 주세요.'));
+    });
+    var mail = serverInfo.settings && serverInfo.settings['email_' + me];
+    if (me) row(mail ? true : null, mail ? '메일 알림: ' + mail : '메일 알림을 쓰지 않습니다.',
+      mail ? null : '설정에서 메일 주소를 적으면 앱을 닫아 두어도 알림이 옵니다.');
   }
 
   function submitSync(e) {
@@ -3115,6 +3286,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       if (sync.url && document.visibilityState === 'visible' && Date.now() - sync.last > 50000) syncNow();
     }, 60000);
     $('bellBtn').addEventListener('click', openInbox);
+    $('mailSaveBtn').addEventListener('click', saveMail);
+    $('warnBand').addEventListener('click', openSyncSheet);
+    $('warnBand').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSyncSheet(); } });
     $('alarmBtn').addEventListener('click', function () { if (alarmNote) goToNote(alarmNote); });
     drawWho();
     updateBell(true);
