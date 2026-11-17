@@ -117,6 +117,18 @@ button{cursor:pointer;-webkit-tap-highlight-color:transparent}
 .inbox b em{font-style:normal;color:#c8402c;font-family:var(--sans);font-size:11px}
 .inbox span{display:block;margin-top:4px;font-size:15px;font-weight:700;line-height:1.6;word-break:keep-all;overflow-wrap:anywhere}
 .inbox small{display:block;margin-top:4px;font-family:var(--sans);font-size:11.5px;color:var(--ink-faint)}
+.mailrow{padding:12px 0;border-top:1px solid var(--rule)}
+.mailrow:first-of-type{border-top:0;padding-top:4px}
+.mailrow label{display:block;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.mailrow .row{display:flex;gap:8px;margin-top:6px}
+.mailrow input{
+  flex:1;min-width:0;height:44px;padding:0 10px;border:1.5px solid var(--ink);border-radius:2px;background:transparent;font-size:16px;
+}
+.mailrow .row button{flex:none;height:44px;padding:0 14px;border:0;border-radius:2px;background:var(--ink);color:var(--paper);font-size:13px;font-weight:700}
+.mailrow .row button:disabled{opacity:.5}
+.mailrow .sub{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:6px;font-size:12px;color:var(--ink-soft);word-break:keep-all}
+.mailrow .sub .ok{color:#3d7a3a;font-weight:700}
+.mailrow .sub .bad{color:#c8402c;font-weight:700}
 .diag{list-style:none;margin:0 0 18px;padding:12px 14px;background:var(--paper-hi);border-radius:2px}
 .diag li{display:flex;gap:10px;padding:7px 0;font-size:13px;line-height:1.55;word-break:keep-all}
 .diag li + li{border-top:1px solid var(--rule)}
@@ -616,28 +628,33 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 .mini strong{font-size:calc(14.5px * var(--ts,1))}
 .entry-review,.empty,.leaf-open,.notes,.note-form textarea,.field textarea,.alarm span,.inbox span{font-family:var(--body-font,var(--serif))}
 .entry-review{font-size:calc(15px * var(--bs,1))}
-.leaf-text{font-size:calc(14.5px * var(--bs,1))}
+.leaf-text{font-size:calc(15px * var(--bs,1))}
 .note-text{font-size:calc(14px * var(--bs,1))}
 .seg2{display:flex;border:1.5px solid var(--ink);border-radius:2px;overflow:hidden;margin-bottom:12px}
 .seg2 button{flex:1;border:0;background:none;padding:9px 0;font-size:13.5px}
 .seg2 button[aria-pressed="true"]{background:var(--ink);color:var(--paper);font-weight:700}
-.fontgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-height:320px;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:2px}
-.fontcard{
-  position:relative;display:block;width:100%;min-height:66px;padding:9px 10px 8px;text-align:left;
-  border:1.5px solid var(--rule);border-radius:2px;background:none;overflow:hidden;
+.fontrow{display:grid;grid-template-columns:76px 1fr;align-items:center;gap:10px;margin-top:12px}
+.fontrow > span{font-size:13px;font-weight:700}
+.fontrow select{
+  width:100%;min-width:0;height:46px;padding:0 34px 0 12px;border:1.5px solid var(--ink);border-radius:2px;
+  background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M3 4.5 6 1.8 9 4.5M3 7.5 6 10.2 9 7.5' fill='none' stroke='%23777' stroke-width='1.4'/%3E%3C/svg%3E") no-repeat right 12px center;
+  -webkit-appearance:none;appearance:none;color:var(--ink);font-size:16px;
 }
-.fontcard[aria-pressed="true"]{border-color:var(--ink);background:var(--paper-hi)}
-.fontcard b{display:block;font-weight:400;font-size:17px;line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fontcard span{display:block;margin-top:3px;font-size:13px;line-height:1.35;color:var(--ink-soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.fontcard em{position:absolute;right:6px;top:5px;font-style:normal;font-family:var(--sans);font-size:10px;color:var(--ink-faint)}
-.fontcard .x{position:absolute;right:2px;bottom:2px;width:24px;height:24px;line-height:24px;text-align:center;font-family:var(--sans);font-size:13px;color:var(--ink-faint)}
-.size-row{display:flex;align-items:center;gap:12px;margin-top:14px}
-.size-row label{flex:none;min-width:84px;font-size:13px}
+.fontrow select option,.fontrow select optgroup{color:#211c18;background:#fff}
+.size-row{display:grid;grid-template-columns:76px 1fr auto;align-items:center;gap:10px;margin-top:10px}
+.size-row label{font-size:13px}
 .size-row label b{font-weight:700}
-.size-row input{flex:1;accent-color:var(--ink)}
-.font-preview{margin:12px 0 0;padding:12px 14px;background:var(--paper-hi);border-radius:2px;word-break:keep-all;overflow-wrap:anywhere}
+.size-row input{width:100%;accent-color:var(--ink)}
+.fontpart{padding:4px 0 14px;border-bottom:1px dashed var(--rule)}
+.fontpart:last-of-type{border-bottom:0}
+.fontpart h4{margin:12px 0 0;font-size:12.5px;font-weight:700;color:var(--ink-soft)}
+.font-preview{margin:12px 0 0;padding:14px 16px;background:var(--paper-hi);border-radius:2px;word-break:keep-all;overflow-wrap:anywhere}
+.font-preview small{display:block;margin-bottom:6px;font-size:11px;color:var(--ink-faint)}
 .font-preview b{display:block;font-weight:800;line-height:1.4}
-.font-preview span{display:block;margin-top:6px;line-height:1.7}
+.font-preview span{display:block;margin-top:8px;line-height:1.7}
+.mine-fonts{list-style:none;margin:8px 0 0;padding:0}
+.mine-fonts li{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-top:1px solid var(--rule);font-size:13px}
+.mine-fonts button{border:0;background:none;padding:4px 0 4px 10px;font-size:12px;color:var(--red);text-decoration:underline}
 .more{margin-top:16px;border-top:1px solid var(--rule);padding-top:10px}
 .more summary{cursor:pointer;font-size:13.5px;font-weight:700;padding:6px 0}
 .more .row{display:flex;gap:8px;margin-top:8px}
@@ -647,6 +664,59 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 .more .row button{flex:none;height:42px;padding:0 14px;border:0;border-radius:2px;background:var(--ink);color:var(--paper);font-size:13px;font-weight:700}
 .more p{margin:8px 0 0;font-size:12px;line-height:1.6;color:var(--ink-soft);word-break:keep-all}
 .more a{color:var(--ink)}
+
+/* 편지 */
+body[data-page="letters"] #writers{display:none}
+.tabs-in{gap:14px}
+.letter-cover{background:var(--paper);margin:0 0 12px;padding:22px 24px 18px;color:var(--ink)}
+.letter-cover > *{position:relative;z-index:1}
+.letter-cover h1{margin:0;font-family:var(--title-font,var(--serif));font-weight:800;font-size:calc(22px * var(--ts,1));letter-spacing:-.01em}
+.letter-cover .byline{margin:8px 0 0;font-size:13px;letter-spacing:.08em}
+.letter-cover .tally{margin:12px 0 0;font-size:12.5px;color:var(--ink-soft)}
+.letter-cover .seg2{margin:16px 0 0}
+.paper,.leaf,.plate,.diary-cover,.letter-cover,.envelope{position:relative}
+.letter-cover::after,.envelope::after{content:"";position:absolute;inset:0;pointer-events:none;background-image:var(--grain);opacity:.13}
+.envelopes{display:grid;gap:10px}
+.envelope{
+  display:grid;grid-template-columns:52px 1fr;gap:14px;align-items:center;width:100%;
+  padding:16px 18px;border:0;border-radius:2px;background:var(--paper);color:var(--ink);text-align:left;
+  box-shadow:0 1px 0 var(--rule);
+}
+.envelope > *{position:relative;z-index:1}
+.env-ico{position:relative;width:52px;height:36px;background:var(--paper-hi);border:1.5px solid var(--ink-faint);border-radius:2px;overflow:hidden}
+.env-ico::before{content:"";position:absolute;left:-1px;right:-1px;top:-20px;height:38px;border-bottom:1.5px solid var(--ink-faint);transform:skewY(0);
+  background:linear-gradient(to bottom right,transparent 49%,var(--ink-faint) 49.5%,transparent 51%) left/50% 100% no-repeat,
+             linear-gradient(to bottom left,transparent 49%,var(--ink-faint) 49.5%,transparent 51%) right/50% 100% no-repeat}
+.env-ico i{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-6px 0 0 -7px;border-radius:50%;background:#c8402c;box-shadow:0 0 0 2px rgba(200,64,44,.25)}
+.env-ico.open i{display:none}
+.env-main{min-width:0}
+.env-top{display:flex;justify-content:space-between;gap:10px;font-size:12px;color:var(--ink-soft)}
+.env-top b{color:var(--ink);font-family:var(--title-font,var(--serif));font-weight:800;font-size:14px}
+.env-title{display:block;margin-top:4px;font-family:var(--body-font,var(--serif));font-weight:700;font-size:15px;line-height:1.5;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.env-state{display:block;margin-top:3px;font-size:11.5px;color:var(--ink-faint)}
+.env-state.new{color:#c8402c;font-weight:700}
+.env-state.read{color:#3d7a3a}
+.letters-empty{padding:34px 24px;background:var(--paper);color:var(--ink-soft);font-family:var(--serif);font-size:15px;line-height:1.8;text-align:center;word-break:keep-all}
+.letter-paper{
+  position:relative;padding:22px 22px 18px;background-color:var(--paper-hi);border-radius:2px;color:var(--ink);
+  background-image:repeating-linear-gradient(to bottom,transparent 0,transparent 31px,var(--rule) 31px,var(--rule) 32px);
+  background-position:0 22px;   /* 줄이 글자 아래에 오도록 위 여백(22px)에 맞춘다 */
+}
+.letter-paper .to,.letter-paper .from{font-family:var(--title-font,var(--serif));font-weight:800;font-size:16px;line-height:32px}
+.letter-paper .from{text-align:right;margin-top:6px}
+.letter-paper .ltitle{display:block;font-family:var(--body-font,var(--serif));font-weight:800;font-size:calc(17px * var(--bs,1));line-height:32px}
+.letter-paper .ltext{font-family:var(--body-font,var(--serif));font-weight:700;font-size:calc(15px * var(--bs,1));line-height:32px;
+  white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;min-height:96px}
+.letter-paper .ldate{text-align:right;font-size:12px;color:var(--ink-soft);line-height:24px}
+.letter-paper input,.letter-paper textarea{
+  display:block;width:100%;border:0;background:transparent;color:var(--ink);padding:0;border-radius:0;resize:none;
+  font-family:var(--body-font,var(--serif));line-height:32px;
+}
+.letter-paper input{font-weight:800;font-size:17px;height:32px}
+.letter-paper textarea{font-weight:700;font-size:16px;min-height:256px}
+.letter-paper input:focus,.letter-paper textarea:focus{outline:none}
+.letter-meta{margin:10px 0 0;font-size:12.5px;color:var(--ink-soft);word-break:keep-all}
 
 #toast{
   position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:20;
@@ -664,6 +734,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   <div class="tabs-in">
     <button type="button" class="tab" data-go="books" aria-current="page">독서 기록</button>
     <button type="button" class="tab" data-go="diary">하루 일기</button>
+    <button type="button" class="tab" data-go="letters">편지</button>
     <button type="button" class="tab" data-go="stats">통계</button>
     <div class="tab-side">
       <button type="button" id="syncBtn">시트 연결</button>
@@ -760,6 +831,27 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     </header>
     <div class="warnband" id="warnBand" hidden role="button" tabindex="0"></div>
     <div id="leafStack"></div>
+    <footer class="imprint">
+      <button type="button" data-settings>설정과 사용법</button>
+    </footer>
+  </section>
+
+  <!-- 편지 -->
+  <section class="leaves" id="pageLetters" aria-label="편지" hidden>
+    <header class="letter-cover">
+      <h1 id="lbTitle">편지함</h1>
+      <p class="byline" id="lbByline"></p>
+      <p class="tally" id="lbTally"></p>
+      <div id="lbWho" hidden>
+        <p class="tally">편지를 주고받으려면 이 휴대폰이 누구 것인지 한 번만 골라 주세요.</p>
+        <div class="who" id="lbWhoBtns" style="margin-top:10px"></div>
+      </div>
+      <div class="seg2" id="lbSeg" role="group" aria-label="편지함">
+        <button type="button" data-lb="in" aria-pressed="true">받은 편지</button>
+        <button type="button" data-lb="out" aria-pressed="false">보낸 편지</button>
+      </div>
+    </header>
+    <div class="envelopes" id="envelopes"></div>
     <footer class="imprint">
       <button type="button" data-settings>설정과 사용법</button>
     </footer>
@@ -945,39 +1037,52 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       <h3>이 휴대폰은 누구 것인가요</h3>
       <p class="sheet-note">고른 사람에게 온 한마디를 위쪽 종과 알림으로 알려 드립니다. 휴대폰마다 따로 정합니다.</p>
       <div class="who" id="whoSet"></div>
-      <div class="field" id="mailField" hidden style="margin-top:16px">
-        <label for="mailInput" id="mailLabel">한마디 메일 알림</label>
-        <input id="mailInput" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" placeholder="비워 두면 메일을 보내지 않습니다">
-        <p class="hint">앱을 닫아 두어도, 상대가 내 일기에 한마디를 남기면 이 주소로 메일이 갑니다. 시트에 연결되어 있어야 하고, 주소는 시트의 ‘설정’ 탭에 저장됩니다.</p>
-        <button type="button" class="text-btn" id="mailSaveBtn">메일 주소 저장</button>
-      </div>
+    </section>
+
+    <section class="set">
+      <h3>메일 알림</h3>
+      <p class="sheet-note" id="mailNote">각자 메일 주소를 적어 두면, 상대가 내 일기에 한마디를 남길 때 그 주소로 메일이 갑니다. 앱을 닫아 두어도 메일 앱 알림으로 받을 수 있습니다.</p>
+      <div id="mailRows"></div>
     </section>
 
     <section class="set">
       <h3>글씨체</h3>
       <p class="sheet-note" id="fontNote"></p>
-      <div class="seg2" id="fontTarget" role="group" aria-label="바꿀 글씨">
-        <button type="button" data-ft="title" aria-pressed="true">제목</button>
-        <button type="button" data-ft="body" aria-pressed="false">본문</button>
+      <div class="seg2" id="fontSection" role="group" aria-label="바꿀 곳">
+        <button type="button" data-fs="books" aria-pressed="true">독서 기록</button>
+        <button type="button" data-fs="diary" aria-pressed="false">하루 일기</button>
       </div>
-      <div class="fontgrid" id="fontGrid"></div>
-      <div class="size-row">
-        <label for="fontSize" id="fontSizeLabel">크기</label>
-        <input type="range" id="fontSize" step="1">
-        <button type="button" class="text-btn" id="fontReset">기본</button>
+      <div class="fontpart">
+        <h4 id="ftTitleHead">제목</h4>
+        <div class="fontrow"><span>글씨체</span><select id="ftTitleFont" aria-label="제목 글씨체"></select></div>
+        <div class="size-row">
+          <label for="ftTitleSize" id="ftTitleSizeLabel">크기</label>
+          <input type="range" id="ftTitleSize" step="1">
+          <button type="button" class="text-btn" data-reset="title">기본</button>
+        </div>
       </div>
-      <div class="font-preview" id="fontPreview"><b>나의 외로움이 나를 이겨낼 수 있는 힘이 되었다.</b><span>오늘은 비가 왔다. It rained all day, and I liked it.</span></div>
+      <div class="fontpart">
+        <h4 id="ftBodyHead">본문</h4>
+        <div class="fontrow"><span>글씨체</span><select id="ftBodyFont" aria-label="본문 글씨체"></select></div>
+        <div class="size-row">
+          <label for="ftBodySize" id="ftBodySizeLabel">크기</label>
+          <input type="range" id="ftBodySize" step="1">
+          <button type="button" class="text-btn" data-reset="body">기본</button>
+        </div>
+      </div>
+      <div class="font-preview" id="fontPreview"><small id="fpWhat">미리보기</small><b id="fpTitle"></b><span id="fpBody"></span></div>
       <details class="more" id="fontMore">
         <summary>다른 글꼴 가져오기</summary>
         <div class="row">
           <input id="gfName" type="text" placeholder="구글 폰트 이름 (예: Hi Melody)" autocomplete="off" autocapitalize="off" spellcheck="false">
           <button type="button" id="gfAdd">추가</button>
         </div>
-        <p><a href="https://fonts.google.com/?subset=korean" target="_blank" rel="noopener">fonts.google.com</a>에서 마음에 드는 글꼴을 찾아 영어 이름을 그대로 적어 주세요. 상대 휴대폰에도 전해집니다.</p>
+        <p><a href="https://fonts.google.com/" target="_blank" rel="noopener">fonts.google.com</a>에서 마음에 드는 글꼴을 찾아 영어 이름을 그대로 적어 주세요. 한글·영문 글꼴 모두 됩니다. 상대 휴대폰에도 전해집니다.</p>
         <div class="row">
           <button type="button" id="fileFontBtn" style="flex:1">내 글꼴 파일 올리기 (.ttf .otf .woff2)</button>
         </div>
         <p>눈누 같은 곳에서 받은 글꼴 파일을 올릴 수 있습니다. 파일은 이 휴대폰에만 저장되어, 상대 휴대폰에서는 기본 글씨체로 보입니다.</p>
+        <ul class="mine-fonts" id="mineFonts"></ul>
       </details>
     </section>
 
@@ -1038,10 +1143,14 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         <dd>위에서 ‘하루 일기’로 넘긴 뒤 아래 버튼을 누릅니다. 한글과 영어 모두 쓸 수 있고 줄을 바꾼 자리가 그대로 보입니다. 날짜를 바꾸면 지난 날 일기도 쓸 수 있습니다.</dd>
         <dt>한마디가 상대에게 안 보일 때</dt>
         <dd>위쪽 ‘시트 저장됨’을 누르면 ‘연결 점검’이 나옵니다. 두 휴대폰의 연결 번호가 같은지, 상대 휴대폰이 최근에 연결했는지, 시트의 Apps Script가 새 판인지 한눈에 볼 수 있습니다. 빨간 표시가 있는 줄의 안내를 따라 주세요.</dd>
+        <dt>메일 알림 켜기</dt>
+        <dd>① 새 Code.gs를 붙여 넣고 ‘배포 관리’에서 기존 배포를 ‘새 버전’으로 수정합니다. ② Apps Script 편집기 위쪽 함수 목록에서 testMail을 골라 ▶실행을 누르고 권한을 허용합니다(처음 한 번만). ③ 앱 설정의 ‘메일 알림’에 각자 메일 주소를 적고 ‘저장’을 누른 뒤 ‘시험 메일 보내기’로 메일이 오는지 확인합니다. 메일이 안 보이면 스팸함도 확인해 주세요.</dd>
+        <dt>편지</dt>
+        <dd>편지 장의 배경과 편지지 색은 설정의 ‘색 바꾸기’에서 ‘편지 배경’, ‘편지지’를 골라 바꿉니다. 맨 위 ‘편지’ 장에서 아래 버튼을 눌러 상대에게 편지를 씁니다. 받은 편지는 봉투로 도착하고, 열어 보면 보낸 쪽 ‘보낸 편지’에 ‘읽음’이 표시됩니다. 새 편지가 오면 종 알림과 메일 알림이 함께 옵니다. 편지는 시트의 ‘송현에게 온 편지’, ‘유정에게 온 편지’ 탭에 쌓입니다.</dd>
         <dt>한마디 알림</dt>
         <dd>설정에서 이 휴대폰이 누구 것인지 고르면, 상대가 내 일기에 한마디를 남겼을 때 위쪽 종에 숫자가 붙고 알림이 잠깐 내려옵니다. 종을 누르면 받은 한마디를 모아 보고, 하나를 누르면 그 일기로 갑니다. 앱이 열려 있는 동안 1분마다 새 한마디를 확인합니다.</dd>
         <dt>글씨체</dt>
-        <dd>설정의 ‘글씨체’에서 제목과 본문을 따로 골라 글꼴과 크기를 바꿀 수 있습니다. 색처럼 송현과 유정이 각자 따로 정합니다. ‘다른 글꼴 가져오기’에서 구글 폰트 이름을 적거나 글꼴 파일을 올려 더할 수도 있습니다.</dd>
+        <dd>설정의 ‘글씨체’에서 ‘독서 기록’과 ‘하루 일기’를 따로 골라, 각각 제목과 본문의 글씨체와 크기를 정합니다. 통계 장은 독서 기록의 글씨체를 따릅니다. 영문 글꼴을 고르면 영어는 그 글꼴로, 한글은 기본 명조로 보입니다. ‘다른 글꼴 가져오기’에서 구글 폰트 이름을 적거나 글꼴 파일을 올려 더할 수도 있습니다.</dd>
         <dt>일기장 제목</dt>
         <dd>하루 일기 장 맨 위 표지의 제목을 누르면 일기장 제목을 지을 수 있습니다. 송현과 유정이 각자 자기 일기장 제목을 따로 가집니다.</dd>
         <dt>서로에게 한마디</dt>
@@ -1067,12 +1176,50 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 <input type="file" id="photoFile" accept="image/*" hidden>
 <input type="file" id="fontFile" accept=".ttf,.otf,.woff,.woff2,font/ttf,font/otf,font/woff,font/woff2" hidden>
 <div id="toast" role="status" aria-live="polite"></div>
-<div class="alarm" id="alarm" role="status" aria-live="polite"><button type="button" id="alarmBtn"><b id="alarmWho"></b><span id="alarmText"></span><small>눌러서 일기에서 보기</small></button></div>
+<div class="alarm" id="alarm" role="status" aria-live="polite"><button type="button" id="alarmBtn"><b id="alarmWho"></b><span id="alarmText"></span><small id="alarmHint">눌러서 일기에서 보기</small></button></div>
+
+<!-- 편지 읽기 -->
+<dialog class="sheet" id="letterSheet" aria-labelledby="letterSheetTitle">
+  <div class="sheet-head">
+    <h2 id="letterSheetTitle">편지</h2>
+    <button type="button" class="sheet-close" data-close>닫기</button>
+  </div>
+  <div class="sheet-body">
+    <article class="letter-paper" id="letterPaper"></article>
+    <p class="letter-meta" id="letterMeta"></p>
+    <div class="actions" style="margin-top:14px">
+      <button type="button" class="btn-line warn" id="letterDelBtn">지우기</button>
+      <button type="button" class="btn-main" id="letterReplyBtn">답장 쓰기</button>
+    </div>
+  </div>
+</dialog>
+
+<!-- 편지 쓰기 -->
+<dialog class="sheet" id="writeSheet" aria-labelledby="writeSheetTitle">
+  <div class="sheet-head">
+    <h2 id="writeSheetTitle">편지 쓰기</h2>
+    <button type="button" class="sheet-close" data-close>닫기</button>
+  </div>
+  <div class="sheet-body">
+    <form id="writeForm" novalidate>
+      <div class="letter-paper">
+        <div class="to" id="writeTo">To.</div>
+        <input id="writeTitle" type="text" maxlength="40" placeholder="제목 (없어도 됩니다)" autocomplete="off" aria-label="편지 제목">
+        <textarea id="writeText" maxlength="3000" placeholder="하고 싶은 말을 천천히 적어 보세요." aria-label="편지 내용"></textarea>
+        <div class="from" id="writeFrom">From.</div>
+      </div>
+      <p class="letter-meta"><span id="writeCount">0/3000</span> · 적는 동안 이 휴대폰에 임시로 저장됩니다. 보내면 상대에게 알림과 메일이 갑니다.</p>
+      <div class="actions" style="margin-top:14px">
+        <button type="submit" class="btn-main" id="writeSend">편지 보내기</button>
+      </div>
+    </form>
+  </div>
+</dialog>
 
 <!-- 받은 한마디 시트 -->
 <dialog class="sheet" id="inboxSheet" aria-labelledby="inboxSheetTitle">
   <div class="sheet-head">
-    <h2 id="inboxSheetTitle">받은 한마디</h2>
+    <h2 id="inboxSheetTitle">받은 한마디와 편지</h2>
     <button type="button" class="sheet-close" data-close>닫기</button>
   </div>
   <div class="sheet-body">
@@ -1089,7 +1236,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 (function () {
   'use strict';
 
-  var VERSION = '11월 6일 스무 번째 판';
+  var VERSION = '11월 17일 스물네 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -1097,6 +1244,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   var ME_KEY = KEY + '-me';
   var SEEN_KEY = KEY + '-seen';
   var DRAFT_KEY = KEY + '-drafts';
+  var LETTER_DRAFT_KEY = KEY + '-letter-draft';
   var CONF_KEY = KEY + '-notes-on-sheet';
   var KAKAO_KEY = KEY + '-kakao';
   var KYOBO_SEARCH = 'https://search.kyobobook.co.kr/search?keyword=';
@@ -1107,23 +1255,50 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   var WRITERS = ['송현', '유정'];
   var WRITER_KEY = 'dokseo-note-v1-writer';
 
-  // 고를 수 있는 글꼴(구글 폰트). [이름, 구글 폰트 이름, 굵기]
-  var FONT_LIST = [
-    ['나눔명조', 'Nanum Myeongjo', '400;700;800'], ['노토 명조', 'Noto Serif KR', '400;700;900'],
-    ['고운바탕', 'Gowun Batang', '400;700'], ['송명', 'Song Myung', '400'], ['함렛', 'Hahmlet', '400;700;800'],
-    ['노토 고딕', 'Noto Sans KR', '400;700;900'], ['나눔고딕', 'Nanum Gothic', '400;700;800'],
-    ['고운돋움', 'Gowun Dodum', '400'], ['IBM 플렉스', 'IBM Plex Sans KR', '400;700'], ['고딕 A1', 'Gothic A1', '400;700;800'],
-    ['나눔 손글씨 펜', 'Nanum Pen Script', '400'], ['나눔 손글씨 붓', 'Nanum Brush Script', '400'],
-    ['개구쟁이', 'Gaegu', '400;700'], ['하이멜로디', 'Hi Melody', '400'], ['감자꽃', 'Gamja Flower', '400'],
-    ['푸어스토리', 'Poor Story', '400'], ['싱글데이', 'Single Day', '400'], ['연성', 'Yeon Sung', '400'],
-    ['주아', 'Jua', '400'], ['도현', 'Do Hyeon', '400'], ['동글', 'Dongle', '400;700'], ['해바라기', 'Sunflower', '300;500;700'],
-    ['스타일리시', 'Stylish', '400'], ['구기', 'Gugi', '400'], ['독도', 'Dokdo', '400'], ['동해독도', 'East Sea Dokdo', '400'],
-    ['기랑해랑', 'Kirang Haerang', '400'], ['귀여운 글씨', 'Cute Font', '400'], ['검은고딕', 'Black Han Sans', '400'],
-    ['오르빗', 'Orbit', '400'], ['디필레이아', 'Diphylleia', '400']
+  // 고를 수 있는 글꼴(구글 폰트). [묶음, [보이는 이름, 구글 폰트 이름, 굵기]...]
+  var B = '400;700';
+  var FONT_GROUPS = [
+    ['한글 명조', [['나눔명조', 'Nanum Myeongjo', '400;700;800'], ['노토 명조', 'Noto Serif KR', '400;700;900'], ['고운바탕', 'Gowun Batang', B],
+      ['송명', 'Song Myung', '400'], ['함렛', 'Hahmlet', '400;700;800'], ['흑백사진', 'Black And White Picture', '400']]],
+    ['한글 고딕', [['노토 고딕', 'Noto Sans KR', '400;700;900'], ['나눔고딕', 'Nanum Gothic', '400;700;800'], ['고운돋움', 'Gowun Dodum', '400'],
+      ['IBM 플렉스', 'IBM Plex Sans KR', B], ['고딕 A1', 'Gothic A1', '400;700;800'], ['나눔고딕 코딩', 'Nanum Gothic Coding', B],
+      ['해바라기', 'Sunflower', '300;500;700'], ['오르빗', 'Orbit', '400']]],
+    ['한글 손글씨', [['나눔 손글씨 펜', 'Nanum Pen Script', '400'], ['나눔 손글씨 붓', 'Nanum Brush Script', '400'], ['개구쟁이', 'Gaegu', B],
+      ['하이멜로디', 'Hi Melody', '400'], ['감자꽃', 'Gamja Flower', '400'], ['푸어스토리', 'Poor Story', '400'], ['싱글데이', 'Single Day', '400'],
+      ['연성', 'Yeon Sung', '400'], ['독도', 'Dokdo', '400'], ['동해독도', 'East Sea Dokdo', '400'], ['기랑해랑', 'Kirang Haerang', '400'],
+      ['귀여운 글씨', 'Cute Font', '400']]],
+    ['한글 개성', [['주아', 'Jua', '400'], ['도현', 'Do Hyeon', '400'], ['동글', 'Dongle', B], ['스타일리시', 'Stylish', '400'], ['구기', 'Gugi', '400'],
+      ['검은고딕', 'Black Han Sans', '400'], ['디필레이아', 'Diphylleia', '400'], ['베이글', 'Bagel Fat One', '400'], ['가석', 'Gasoek One', '400'],
+      ['모이라이', 'Moirai One', '400'], ['그랜디플로라', 'Grandiflora One', '400']]],
+    ['영문 세리프', [['Playfair Display', 'Playfair Display', B], ['Lora', 'Lora', B], ['Merriweather', 'Merriweather', B],
+      ['EB Garamond', 'EB Garamond', B], ['Cormorant Garamond', 'Cormorant Garamond', B], ['Libre Baskerville', 'Libre Baskerville', B],
+      ['Crimson Text', 'Crimson Text', B], ['DM Serif Display', 'DM Serif Display', '400'], ['Bodoni Moda', 'Bodoni Moda', B],
+      ['Cinzel', 'Cinzel', B], ['Spectral', 'Spectral', B], ['Source Serif 4', 'Source Serif 4', B], ['PT Serif', 'PT Serif', B],
+      ['Fraunces', 'Fraunces', B], ['Literata', 'Literata', B], ['Newsreader', 'Newsreader', B], ['Prata', 'Prata', '400'],
+      ['Old Standard TT', 'Old Standard TT', B], ['Abril Fatface', 'Abril Fatface', '400'], ['Noto Serif', 'Noto Serif', B]]],
+    ['영문 산세리프', [['Inter', 'Inter', B], ['Roboto', 'Roboto', B], ['Open Sans', 'Open Sans', B], ['Lato', 'Lato', B],
+      ['Montserrat', 'Montserrat', B], ['Poppins', 'Poppins', B], ['Raleway', 'Raleway', B], ['Nunito', 'Nunito', B],
+      ['Work Sans', 'Work Sans', B], ['DM Sans', 'DM Sans', B], ['Manrope', 'Manrope', B], ['Outfit', 'Outfit', B],
+      ['Josefin Sans', 'Josefin Sans', B], ['Quicksand', 'Quicksand', B], ['Karla', 'Karla', B], ['Rubik', 'Rubik', B],
+      ['Barlow', 'Barlow', B], ['Space Grotesk', 'Space Grotesk', B], ['Figtree', 'Figtree', B], ['Mulish', 'Mulish', B]]],
+    ['영문 손글씨', [['Caveat', 'Caveat', B], ['Dancing Script', 'Dancing Script', B], ['Pacifico', 'Pacifico', '400'],
+      ['Great Vibes', 'Great Vibes', '400'], ['Satisfy', 'Satisfy', '400'], ['Sacramento', 'Sacramento', '400'],
+      ['Shadows Into Light', 'Shadows Into Light', '400'], ['Indie Flower', 'Indie Flower', '400'], ['Homemade Apple', 'Homemade Apple', '400'],
+      ['Kalam', 'Kalam', B], ['Patrick Hand', 'Patrick Hand', '400'], ['Amatic SC', 'Amatic SC', B],
+      ['Gloria Hallelujah', 'Gloria Hallelujah', '400'], ['Reenie Beanie', 'Reenie Beanie', '400'], ['La Belle Aurore', 'La Belle Aurore', '400'],
+      ['Cedarville Cursive', 'Cedarville Cursive', '400'], ['Allura', 'Allura', '400'], ['Parisienne', 'Parisienne', '400'],
+      ['Kaushan Script', 'Kaushan Script', '400'], ['Nothing You Could Do', 'Nothing You Could Do', '400']]],
+    ['영문 개성', [['Bebas Neue', 'Bebas Neue', '400'], ['Lobster', 'Lobster', '400'], ['Righteous', 'Righteous', '400'],
+      ['Comfortaa', 'Comfortaa', B], ['Fredoka', 'Fredoka', B], ['Special Elite', 'Special Elite', '400'], ['Alfa Slab One', 'Alfa Slab One', '400'],
+      ['Shrikhand', 'Shrikhand', '400'], ['Unbounded', 'Unbounded', B], ['Monoton', 'Monoton', '400'], ['Press Start 2P', 'Press Start 2P', '400']]],
+    ['영문 고정폭(타자기)', [['Courier Prime', 'Courier Prime', B], ['IBM Plex Mono', 'IBM Plex Mono', B], ['Space Mono', 'Space Mono', B],
+      ['JetBrains Mono', 'JetBrains Mono', B], ['Roboto Mono', 'Roboto Mono', B], ['Source Code Pro', 'Source Code Pro', B]]]
   ];
+  var FONT_LIST = [];
+  FONT_GROUPS.forEach(function (g) { g[1].forEach(function (f) { FONT_LIST.push(f); }); });
   var FONT_SIZE = {   // 슬라이더 기준(px)과 범위
-    title: { base: 32, min: 20, max: 46, what: '표지 제목' },
-    body: { base: 15, min: 11, max: 24, what: '본문' }
+    books: { title: { base: 32, min: 20, max: 46, what: '표지 제목' }, body: { base: 15, min: 11, max: 24, what: '한줄 감상평' } },
+    diary: { title: { base: 17, min: 12, max: 34, what: '일기장 제목' }, body: { base: 15, min: 11, max: 26, what: '일기와 한마디' } }
   };
   var FONT_DB = 'dokseo-note-fonts';
 
@@ -1133,7 +1308,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   var OLD_BYLINE = '나의 독서록';
   var DEFAULT_THEME = {
     books: { frame: '#1d3b6e', paper: '#dcc6a2' },
-    diary: { frame: '#e3e2de', paper: '#f2f1ee' }
+    diary: { frame: '#e3e2de', paper: '#f2f1ee' },
+    letters: { frame: '#e3e2de', paper: '#f2f1ee' }
   };
   var DARK_INK = '#211c18';
   var LIGHT_INK = '#f3ecdf';
@@ -1144,7 +1320,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   ];
   var TARGETS = [
     ['books', 'frame', '독서 기록 배경'], ['books', 'paper', '독서 기록 내용'],
-    ['diary', 'frame', '하루 일기 배경'], ['diary', 'paper', '하루 일기 내용']
+    ['diary', 'frame', '하루 일기 배경'], ['diary', 'paper', '하루 일기 내용'],
+    ['letters', 'frame', '편지 배경'], ['letters', 'paper', '편지지']
   ];
 
   var store = {
@@ -1156,7 +1333,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     fonts: {},
     books: [],
     diary: [],
-    notes: []
+    notes: [],
+    letters: []
   };
   var sync = { url: '', password: '', outbox: [], last: 0 };
   var photo = '';
@@ -1249,7 +1427,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   function cloneTheme(t) {
     return {
       books: { frame: t.books.frame, paper: t.books.paper },
-      diary: { frame: t.diary.frame, paper: t.diary.paper }
+      diary: { frame: t.diary.frame, paper: t.diary.paper },
+      letters: { frame: t.letters.frame, paper: t.letters.paper }
     };
   }
   function defaultThemes() {
@@ -1268,12 +1447,14 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   function cleanTheme(t) {
     var out = cloneTheme(DEFAULT_THEME);
     if (t && typeof t === 'object') {
-      ['books', 'diary'].forEach(function (p) {
+      ['books', 'diary', 'letters'].forEach(function (p) {
         ['frame', 'paper'].forEach(function (k) {
           var v = t[p] && validHex(t[p][k]);
           if (v) out[p][k] = v;
         });
       });
+      // 예전 판에는 편지 색이 없었다. 그때는 하루 일기 색을 그대로 이어받아 보이던 모습을 지킨다.
+      if (!t.letters) out.letters = { frame: out.diary.frame, paper: out.diary.paper };
     }
     return out;
   }
@@ -1331,6 +1512,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
           if (Array.isArray(d.books)) store.books = d.books.map(cleanBook).filter(Boolean);
           if (Array.isArray(d.diary)) store.diary = d.diary.map(cleanDiary).filter(Boolean);
           if (Array.isArray(d.notes)) store.notes = d.notes.map(cleanNote).filter(Boolean);
+          if (Array.isArray(d.letters)) store.letters = d.letters.map(cleanLetter).filter(Boolean);
           if (typeof d.title === 'string' && d.title.trim()) store.title = d.title;
           if (typeof d.byline === 'string') store.byline = d.byline;
           if (typeof d.sign === 'string') store.sign = d.sign;
@@ -1443,6 +1625,26 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     return others[0] || name;
   }
 
+  // 편지. to = 받는 사람(시트에서는 "받는 사람에게 온 편지" 탭), from = 보낸 사람
+  function cleanLetter(l) {
+    if (!l || typeof l !== 'object') return null;
+    var text = (l.text == null ? '' : String(l.text)).replace(/\r\n?/g, '\n').replace(/\s+$/, '').slice(0, 3000);
+    var to = WRITERS.indexOf(l.to) !== -1 ? l.to : WRITERS.indexOf(l.writer) !== -1 ? l.writer : '';
+    if (!text.trim() || !to) return null;
+    var created = Number(l.createdAt) || Date.now();
+    return {
+      id: str(l.id, 40) || newId('l'),
+      writer: to,
+      to: to,
+      from: WRITERS.indexOf(l.from) !== -1 ? l.from : otherOf(to),
+      title: str(l.title, 40),
+      text: text,
+      createdAt: created,
+      readAt: Number(l.readAt) || 0,
+      updatedAt: Number(l.updatedAt) || created
+    };
+  }
+
   function cleanRating(v) {
     var n = Math.round((parseFloat(v) || 0) * 2) / 2;
     return Math.max(0, Math.min(5, n));
@@ -1526,12 +1728,14 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   /* ---------- 장 넘기기 ---------- */
   function setPage(p, keepScroll) {
-    page = p === 'diary' || p === 'stats' ? p : 'books';
+    page = p === 'diary' || p === 'stats' || p === 'letters' ? p : 'books';
     document.body.setAttribute('data-page', page);
     $('pageBooks').hidden = page !== 'books';
     $('pageDiary').hidden = page !== 'diary';
     $('pageStats').hidden = page !== 'stats';
+    $('pageLetters').hidden = page !== 'letters';
     if (page === 'stats') renderStats();
+    if (page === 'letters') renderLetters();
     Array.prototype.forEach.call(document.querySelectorAll('.tab'), function (t) {
       if (t.getAttribute('data-go') === page) t.setAttribute('aria-current', 'page');
       else t.removeAttribute('aria-current');
@@ -1543,7 +1747,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   }
 
   // 통계 장은 독서 기록 장의 색을 쓴다
-  function themePage() { return page === 'diary' ? 'diary' : 'books'; }
+  // 편지 장은 하루 일기 장의 색과 글씨체를 쓴다
+  function themePage() { return page === 'diary' || page === 'letters' ? page : 'books'; }
+  // 글씨체는 편지 장도 하루 일기 설정을 따른다
+  function fontPage() { return page === 'diary' || page === 'letters' ? 'diary' : 'books'; }
 
   function todayEntry() {
     var t = today();
@@ -1557,9 +1764,15 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var c = name.charCodeAt(name.length - 1);
     return (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 !== 0) ? '이' : '가';
   }
+  // 이름 뒤에 붙는 ‘과/와’
+  function wa(name) {
+    var c = name.charCodeAt(name.length - 1);
+    return (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 !== 0) ? '과' : '와';
+  }
   function bookLabel(who) { return who + iGa(who) + ' 읽은 책 기록하기'; }
 
   function updateBarLabel() {
+    if (page === 'letters') { $('addBtn').textContent = me ? otherOf(me) + '에게 편지 쓰기' : '편지 쓰기'; return; }
     $('addBtn').textContent = page !== 'diary'
       ? bookLabel(writer)
       : writer + '의 오늘 일기 ' + (todayEntry() ? '고치기' : '쓰기');
@@ -1574,6 +1787,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     renderBooks();
     renderDiary();
     renderStats();
+    renderLetters();
     updateBarLabel();
     updateSyncLabel();
     Array.prototype.forEach.call(document.querySelectorAll('.storage-notice'), function (n) {
@@ -1717,7 +1931,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var band = $('warnBand'), msg = '';
     if (!sync.url) {
       if (store.notes.length) msg = '시트에 연결되어 있지 않아 한마디가 이 휴대폰에만 남아 있습니다. <u>시트 연결</u>을 눌러 주세요.';
-    } else if (serverInfo && !serverInfo.hasNotes) {
+    } else if (serverInfo && (!serverInfo.hasNotes || (lettersOld && store.letters.length))) {
       msg = '시트의 Apps Script가 예전 판이라 한마디가 상대에게 가지 않습니다. <u>연결 점검</u>을 눌러 안내를 따라 주세요.';
     } else if (syncState === 'fail') {
       msg = '시트에 닿지 않아 한마디를 주고받지 못하고 있습니다. <u>연결 점검</u>을 눌러 주세요.';
@@ -1871,6 +2085,181 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     toast(sync.url ? note.to + '에게 한마디를 남겼습니다.' : note.to + '에게 한마디를 남겼습니다. 시트에 연결하면 상대에게도 보입니다.');
   }
 
+  /* ---------- 편지 ---------- */
+  var lbView = 'in';
+  function isLetter(x) { return !!x && typeof x.title === 'string' && x.diaryId === undefined; }
+  function lettersIn() {
+    return store.letters.filter(function (l) { return me && l.to === me && l.from !== me; })
+      .sort(function (a, b) { return b.createdAt - a.createdAt; });
+  }
+  function lettersOut() {
+    return store.letters.filter(function (l) { return me && l.from === me; })
+      .sort(function (a, b) { return b.createdAt - a.createdAt; });
+  }
+  function letterUnread(l) { return !!me && l.to === me && l.from !== me && !l.readAt && !seen[l.id]; }
+
+  function renderLetters() {
+    if (!$('pageLetters')) return;
+    $('lbWho').hidden = !!me;
+    $('lbSeg').hidden = !me;
+    var wb = $('lbWhoBtns');
+    if (!wb.children.length) {
+      WRITERS.forEach(function (w) {
+        wb.appendChild(h('button', { type: 'button', onclick: function () { setMe(w); renderLetters(); updateBarLabel(); } }, w));
+      });
+    }
+    var box = $('envelopes');
+    box.textContent = '';
+    if (!me) {
+      $('lbByline').textContent = '';
+      $('lbTally').textContent = '';
+      return;
+    }
+    var ins = lettersIn(), outs = lettersOut();
+    var un = ins.filter(letterUnread).length;
+    $('lbTitle').textContent = me + '의 편지함';
+    $('lbByline').textContent = otherOf(me) + wa(otherOf(me)) + ' 주고받은 편지';
+    $('lbTally').textContent = '받은 편지 ' + ins.length + '통' + (un ? ', 그중 읽지 않은 편지 ' + un + '통' : '') + ' · 보낸 편지 ' + outs.length + '통';
+    Array.prototype.forEach.call($('lbSeg').children, function (b) {
+      var v = b.getAttribute('data-lb');
+      b.setAttribute('aria-pressed', v === lbView ? 'true' : 'false');
+      b.textContent = (v === 'in' ? '받은 편지' : '보낸 편지') + (v === 'in' && un ? ' · ' + un : '');
+    });
+    var list = lbView === 'in' ? ins : outs;
+    if (!list.length) {
+      box.appendChild(h('div', { class: 'letters-empty' }, lbView === 'in'
+        ? '아직 받은 편지가 없습니다.' + (sync.url ? '' : '\n시트에 연결해야 ' + otherOf(me) + '의 편지가 이 휴대폰에 옵니다.')
+        : '아직 보낸 편지가 없습니다.\n아래 버튼으로 ' + otherOf(me) + '에게 첫 편지를 써 보세요.'));
+      box.lastChild.style.whiteSpace = 'pre-line';
+      return;
+    }
+    list.forEach(function (l) {
+      var incoming = lbView === 'in';
+      var unread = incoming && letterUnread(l);
+      var state = incoming
+        ? (unread ? h('span', { class: 'env-state new' }, '새 편지') : h('span', { class: 'env-state' }, '읽음'))
+        : (l.readAt ? h('span', { class: 'env-state read' }, otherOf(me) + iGa(otherOf(me)) + ' 읽었어요 · ' + shortTime(l.readAt))
+                    : h('span', { class: 'env-state' }, '아직 읽지 않았어요'));
+      box.appendChild(h('button', { type: 'button', class: 'envelope', 'data-letter': l.id, onclick: function () { openLetter(l.id); } },
+        h('span', { class: 'env-ico' + (unread ? '' : ' open') }, h('i')),
+        h('span', { class: 'env-main' },
+          h('span', { class: 'env-top' }, h('b', null, incoming ? 'From. ' + l.from : 'To. ' + l.to), h('span', null, shortTime(l.createdAt))),
+          h('span', { class: 'env-title' }, l.title || l.text.split('\n')[0]),
+          state)));
+    });
+  }
+
+  var openLetterId = null;
+  function openLetter(id) {
+    var i = findById(store.letters, id);
+    if (i < 0) return;
+    var l = store.letters[i];
+    openLetterId = id;
+    hideAlarm();
+    closeSheets();
+    var paper = $('letterPaper');
+    paper.textContent = '';
+    paper.appendChild(h('div', { class: 'to' }, 'To. ' + l.to));
+    if (l.title) paper.appendChild(h('span', { class: 'ltitle' }, l.title));
+    paper.appendChild(h('div', { class: 'ltext' }, l.text));
+    paper.appendChild(h('div', { class: 'from' }, 'From. ' + l.from));
+    paper.appendChild(h('div', { class: 'ldate' }, dateTimeText(l.createdAt)));
+    var mine = me && l.from === me;
+    $('letterSheetTitle').textContent = mine ? l.to + '에게 보낸 편지' : l.from + iGa(l.from) + ' 보낸 편지';
+    $('letterMeta').textContent = mine
+      ? (l.readAt ? l.to + iGa(l.to) + ' ' + dateTimeText(l.readAt) + '에 읽었습니다.' : l.to + iGa(l.to) + ' 아직 읽지 않았습니다.')
+      : '지우면 두 사람 모두의 편지함에서 사라집니다.';
+    $('letterReplyBtn').hidden = !(me && l.to === me && l.from !== me);
+    disarm($('letterDelBtn'));
+    $('letterSheet').showModal();
+    $('letterSheet').querySelector('.sheet-body').scrollTop = 0;
+    // 받는 사람이 처음 열면 ‘읽음’으로 남긴다.
+    if (me && l.to === me && l.from !== me && !l.readAt) {
+      var copy = cleanLetter(l);
+      copy.readAt = Date.now();
+      copy.updatedAt = copy.readAt;
+      store.letters[i] = copy;
+      seen[l.id] = true; saveSeen();
+      save();
+      queue({ type: 'letter', action: 'upsert', record: copy });
+      renderLetters();
+      updateBell(false);
+    }
+  }
+  function dateTimeText(ms) {
+    var d = new Date(ms);
+    return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '. ' + pad(d.getHours(), 2) + ':' + pad(d.getMinutes(), 2);
+  }
+  function deleteLetter() {
+    var i = findById(store.letters, openLetterId);
+    if (i < 0) return;
+    var l = store.letters[i];
+    store.letters.splice(i, 1);
+    save();
+    queue({ type: 'letter', action: 'delete', id: l.id, writer: l.to });
+    $('letterSheet').close();
+    renderLetters();
+    toast('편지를 지웠습니다.');
+  }
+  function goToLetter(l) {
+    hideAlarm();
+    closeSheets();
+    lbView = 'in';
+    setPage('letters', true);
+    openLetter(l.id);
+  }
+
+  // 편지 쓰기
+  function letterDraft() {
+    try { return JSON.parse(localStorage.getItem(LETTER_DRAFT_KEY) || 'null') || {}; } catch (e) { return {}; }
+  }
+  function keepLetterDraft() {
+    var t = $('writeTitle').value, x = $('writeText').value;
+    try {
+      if (t || x) localStorage.setItem(LETTER_DRAFT_KEY, JSON.stringify({ title: t, text: x }));
+      else localStorage.removeItem(LETTER_DRAFT_KEY);
+    } catch (e) {}
+    $('writeCount').textContent = x.length + '/3000';
+    var ta = $('writeText');
+    ta.style.height = 'auto';
+    ta.style.height = Math.max(256, ta.scrollHeight) + 'px';
+  }
+  function openWrite(replyTo) {
+    if (!me) {
+      setPage('letters', true);
+      toast('먼저 이 휴대폰이 누구 것인지 골라 주세요.');
+      return;
+    }
+    closeSheets();
+    var to = otherOf(me);
+    var dr = letterDraft();
+    $('writeSheetTitle').textContent = replyTo ? to + '에게 답장 쓰기' : to + '에게 편지 쓰기';
+    $('writeTo').textContent = 'To. ' + to;
+    $('writeFrom').textContent = 'From. ' + me;
+    $('writeTitle').value = dr.title || (replyTo && replyTo.title ? '답장: ' + replyTo.title.slice(0, 34) : '');
+    $('writeText').value = dr.text || '';
+    $('writeSheet').showModal();
+    keepLetterDraft();
+    $('writeSheet').querySelector('.sheet-body').scrollTop = 0;
+  }
+  function sendLetter(e) {
+    e.preventDefault();
+    var text = $('writeText').value;
+    if (!text.trim()) { toast('편지 내용을 적어 주세요.'); $('writeText').focus(); return; }
+    var l = cleanLetter({ id: newId('l'), to: otherOf(me), from: me, title: $('writeTitle').value, text: text, createdAt: Date.now() });
+    store.letters.push(l);
+    seen[l.id] = true; saveSeen();
+    save();
+    queue({ type: 'letter', action: 'upsert', record: l });
+    try { localStorage.removeItem(LETTER_DRAFT_KEY); } catch (err) {}
+    $('writeTitle').value = ''; $('writeText').value = '';
+    $('writeSheet').close();
+    lbView = 'out';
+    setPage('letters', true);
+    renderLetters();
+    toast(sync.url ? l.to + '에게 편지를 보냈습니다.' : l.to + '에게 편지를 썼습니다. 시트에 연결해야 상대에게 갑니다.');
+  }
+
   /* ---------- 받은 한마디 알림 ---------- */
   function saveSeen() {
     var ids = Object.keys(seen).slice(-800);
@@ -1880,6 +2269,11 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   function unreadNotes() {
     return store.notes.filter(isUnread).sort(function (a, b) { return b.createdAt - a.createdAt; });
   }
+  // 종 숫자와 알림에 쓰는 것: 읽지 않은 한마디와 편지
+  function unreadAll() {
+    return unreadNotes().concat(store.letters.filter(letterUnread))
+      .sort(function (a, b) { return b.createdAt - a.createdAt; });
+  }
   function markSeen(list) {
     var changed = false;
     list.forEach(function (n) { if (!seen[n.id]) { seen[n.id] = true; changed = true; } });
@@ -1888,11 +2282,11 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   var lastAlarmIds = null;
   function updateBell(fresh) {
-    var un = unreadNotes();
+    var un = unreadAll();
     var c = $('bellCount');
     c.hidden = !un.length;
     c.textContent = un.length > 9 ? '9+' : String(un.length);
-    $('bellBtn').setAttribute('aria-label', un.length ? '받은 한마디, 새 한마디 ' + un.length + '개' : '받은 한마디');
+    $('bellBtn').setAttribute('aria-label', un.length ? '받은 한마디와 편지, 새 소식 ' + un.length + '개' : '받은 한마디와 편지');
     // 새로 들어온 것이 있으면 위에 알림을 띄운다.
     var ids = un.map(function (n) { return n.id; });
     if (lastAlarmIds === null) {
@@ -1910,8 +2304,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   var alarmTimer, alarmNote = null;
   function showAlarm(n, count) {
     alarmNote = n;
-    $('alarmWho').textContent = n.from + iGa(n.from) + ' ' + n.to + '에게 한마디를 남겼어요' + (count > 1 ? ' (새 한마디 ' + count + '개)' : '');
-    $('alarmText').textContent = n.text;
+    $('alarmWho').textContent = n.from + iGa(n.from) + ' ' + n.to + '에게 ' + (isLetter(n) ? '편지를 보냈어요' : '한마디를 남겼어요') +
+      (count > 1 ? ' (새 소식 ' + count + '개)' : '');
+    $('alarmText').textContent = isLetter(n) ? (n.title ? '‘' + n.title + '’ ' : '') + n.text : n.text;
+    $('alarmHint').textContent = isLetter(n) ? '눌러서 편지 열기' : '눌러서 일기에서 보기';
     var el = $('alarm');
     el.classList.add('show');
     $('bellBtn').classList.remove('ring');
@@ -1943,30 +2339,84 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     try { localStorage.setItem(ME_KEY, me); } catch (e) {}
     // 처음 고를 때는 그동안 쌓인 것도 알려 주되, 내가 남긴 것은 뺀다.
     if (first) lastAlarmIds = [];
+    if ($('pageLetters')) setTimeout(function () { renderLetters(); updateBarLabel(); }, 0);
     lastBeat = 0;
     if (sync.url) { clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 300); }
     drawWho();
     updateBell(false);
     renderDiary();
   }
-  function drawMail() {
-    var f = $('mailField');
-    f.hidden = !me;
-    if (!me) return;
-    $('mailLabel').textContent = me + '에게 온 한마디를 메일로 받기';
-    var cur = serverInfo && serverInfo.settings ? serverInfo.settings['email_' + me] || '' : '';
-    if (document.activeElement !== $('mailInput')) $('mailInput').value = cur;
+  var MAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+  var mailStatus = {};   // 사람마다 마지막 시험 결과
+  function mailOf(w) {
+    return serverInfo && serverInfo.settings ? String(serverInfo.settings['email_' + w] || '') : '';
   }
-  function saveMail() {
-    if (!me) return;
-    var v = $('mailInput').value.trim();
-    if (v && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { toast('메일 주소를 다시 확인해 주세요.'); return; }
+  function drawMail() {
+    var wrap = $('mailRows');
+    if (!wrap) return;
+    var focused = document.activeElement && document.activeElement.getAttribute && document.activeElement.getAttribute('data-mail');
+    if (!wrap.children.length) {
+      WRITERS.forEach(function (w) {
+        var input = h('input', { type: 'email', inputmode: 'email', autocomplete: 'off', autocapitalize: 'off', spellcheck: 'false',
+          placeholder: '비워 두면 메일을 보내지 않습니다', id: 'mail-' + w, 'data-mail': w });
+        var saveBtn = h('button', { type: 'button', onclick: function () { saveMail(w); } }, '저장');
+        input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); saveMail(w); } });
+        var test = h('button', { type: 'button', class: 'text-btn', 'data-test': w, onclick: function () { testMail(w); } }, '시험 메일 보내기');
+        wrap.appendChild(h('div', { class: 'mailrow' },
+          h('label', { for: 'mail-' + w }, w + '에게 온 한마디를 받을 메일'),
+          h('div', { class: 'row' }, input, saveBtn),
+          h('div', { class: 'sub' }, h('span', { 'data-status': w }), test)));
+      });
+    }
+    WRITERS.forEach(function (w) {
+      var input = $('mail-' + w);
+      if (focused !== w) input.value = mailOf(w);
+      var st = wrap.querySelector('[data-status="' + w + '"]');
+      var ms = mailStatus[w];
+      st.className = ms ? ms.cls : '';
+      st.textContent = ms ? ms.text : (mailOf(w) ? '저장되어 있습니다.' : '');
+    });
+    $('mailNote').textContent = !sync.url
+      ? '메일은 구글 시트를 거쳐 보냅니다. 먼저 위쪽 ‘시트 연결’에서 시트에 연결해 주세요.'
+      : '각자 메일 주소를 적어 두면, 상대가 내 일기에 한마디를 남길 때 그 주소로 메일이 갑니다. 앱을 닫아 두어도 메일 앱 알림으로 받을 수 있습니다. 한 휴대폰에서 두 사람 주소를 다 적어도 됩니다.';
+  }
+  function saveMail(w) {
+    var v = $('mail-' + w).value.trim();
+    if (v && !MAIL_RE.test(v)) { toast('메일 주소를 다시 확인해 주세요.'); return; }
     if (!sync.url) { toast('시트에 먼저 연결해 주세요. 메일은 시트를 거쳐 보냅니다.'); return; }
     var value = {};
-    value['email_' + me] = v;
-    if (serverInfo) serverInfo.settings['email_' + me] = v;
+    value['email_' + w] = v;
+    if (!serverInfo) serverInfo = { version: 0, hasNotes: true, notes: 0, settings: {}, at: 0 };
+    serverInfo.settings['email_' + w] = v;
+    delete mailStatus[w];
     queue({ type: 'settings', action: 'set', value: value });
-    toast(v ? '메일 주소를 저장했습니다. Apps Script에서 testMail을 한 번 실행해 권한을 허용해 주세요.' : '메일 알림을 껐습니다.');
+    $('mail-' + w).blur();
+    drawMail();
+    toast(v ? w + '의 메일 주소를 저장했습니다. ‘시험 메일 보내기’로 확인해 보세요.' : w + '의 메일 알림을 껐습니다.');
+  }
+  function testMail(w) {
+    if (!sync.url) { toast('시트에 먼저 연결해 주세요.'); return; }
+    var typed = $('mail-' + w).value.trim();
+    if (typed !== mailOf(w)) { toast('먼저 ‘저장’을 눌러 주세요.'); return; }
+    if (!typed) { toast(w + '의 메일 주소를 먼저 적고 저장해 주세요.'); return; }
+    var btn = document.querySelector('[data-test="' + w + '"]');
+    btn.disabled = true;
+    mailStatus[w] = { cls: '', text: '보내는 중입니다.' };
+    drawMail();
+    // 저장할 것이 남아 있으면 먼저 보내고 시험한다.
+    syncNow().then(function () {
+      return post({ password: sync.password, action: 'testMail', who: w });
+    }).then(function (d) {
+      if (d && d.mail === 'sent') mailStatus[w] = { cls: 'ok', text: '보냈습니다. 메일함(스팸함도)을 확인해 주세요.' };
+      else if (d && d.mail === 'noaddr') mailStatus[w] = { cls: 'bad', text: '시트에 주소가 아직 없습니다. 잠시 뒤 다시 눌러 주세요.' };
+      else if (d && d.mail === 'error') mailStatus[w] = { cls: 'bad', text: /permission|권한|authoriz|scope/i.test(d.detail || '')
+        ? '메일 보내기 권한이 없습니다. Apps Script 편집기에서 testMail을 한 번 실행해 권한을 허용해 주세요.'
+        : '보내지 못했습니다: ' + String(d.detail || '').slice(0, 80) };
+      else if (d && d.ok === false && d.error === 'password') mailStatus[w] = { cls: 'bad', text: '시트 비밀번호가 맞지 않습니다.' };
+      else mailStatus[w] = { cls: 'bad', text: '시트의 Apps Script가 예전 판입니다. 새 Code.gs로 ‘새 버전’ 배포를 해 주세요.' };
+    }, function () {
+      mailStatus[w] = { cls: 'bad', text: '시트에 닿지 못했습니다. 인터넷 연결을 확인해 주세요.' };
+    }).then(function () { btn.disabled = false; drawMail(); });
   }
 
   function drawWho() {
@@ -1993,12 +2443,20 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     list.textContent = '';
     if (!me) { $('inboxNote').textContent = ''; return; }
     var mine = store.notes.filter(function (n) { return n.to === me && n.from !== me; })
+      .concat(lettersIn())
       .sort(function (a, b) { return b.createdAt - a.createdAt; }).slice(0, 40);
-    var un = mine.filter(isUnread).length;
+    var un = mine.filter(function (x) { return isLetter(x) ? letterUnread(x) : isUnread(x); }).length;
     $('inboxNote').textContent = !mine.length
-      ? me + '에게 온 한마디가 아직 없습니다.' + (sync.url ? '' : ' 시트에 연결해야 상대가 남긴 한마디가 이 휴대폰에 옵니다.')
-      : (un ? '새 한마디 ' + un + '개를 포함해 ' : '') + me + '에게 온 한마디 ' + mine.length + '개입니다. 누르면 그 일기로 갑니다.';
+      ? me + '에게 온 한마디와 편지가 아직 없습니다.' + (sync.url ? '' : ' 시트에 연결해야 상대가 보낸 것이 이 휴대폰에 옵니다.')
+      : (un ? '새 소식 ' + un + '개를 포함해 ' : '') + me + '에게 온 한마디와 편지 ' + mine.length + '개입니다. 누르면 그곳으로 갑니다.';
     mine.forEach(function (n) {
+      if (isLetter(n)) {
+        list.appendChild(h('li', null, h('button', { type: 'button', onclick: function () { goToLetter(n); } },
+          h('b', null, h('span', null, '✉ ' + n.from + iGa(n.from) + ' 보낸 편지'), letterUnread(n) ? h('em', null, '새 편지') : null),
+          h('span', null, n.title || n.text.split('\n')[0]),
+          h('small', null, shortTime(n.createdAt)))));
+        return;
+      }
       var diary = store.diary[findById(store.diary, n.diaryId)];
       list.appendChild(h('li', null, h('button', { type: 'button', onclick: function () { goToNote(n); } },
         h('b', null, h('span', null, n.from + iGa(n.from) + ' ' + n.to + '에게'), isUnread(n) ? h('em', null, '새 한마디') : null),
@@ -2725,20 +3183,27 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   }
   // 색은 사람마다 따로 보내서, 한 사람이 바꿔도 다른 사람의 색을 덮어쓰지 않게 한다.
   /* ---------- 글씨체 ---------- */
-  // 사람마다 { title: {f, s}, body: {f, s}, extra: [구글 폰트 이름...] }
+  // 사람마다 { books: {title:{f,s}, body:{f,s}}, diary: {title, body}, extra: [구글 폰트 이름...] }
   // f: '' 기본 / 'g:구글 폰트 이름' / 'u:올린 파일 ID',  s: 0 기본 / 글자 크기(px)
-  function cleanFontPart(p, kind) {
+  function cleanFontPart(p, sec, kind) {
     var f = p && typeof p.f === 'string' ? p.f.slice(0, 80) : '';
     if (f && !/^(g|u):./.test(f)) f = '';
     var size = Number(p && p.s) || 0;
-    var lim = FONT_SIZE[kind];
+    var lim = FONT_SIZE[sec][kind];
     if (size) size = Math.max(lim.min, Math.min(lim.max, Math.round(size)));
     return { f: f, s: size };
   }
   function cleanFonts(t) {
     t = t && typeof t === 'object' ? t : {};
-    var extra = Array.isArray(t.extra) ? t.extra.map(function (x) { return gfName(x); }).filter(Boolean).slice(0, 20) : [];
-    return { title: cleanFontPart(t.title, 'title'), body: cleanFontPart(t.body, 'body'), extra: extra };
+    var extra = Array.isArray(t.extra) ? t.extra.map(function (x) { return gfName(x); }).filter(Boolean).slice(0, 30) : [];
+    var out = { extra: extra };
+    ['books', 'diary'].forEach(function (sec) {
+      // 예전 판은 장 구분 없이 { title, body } 하나였다. 그때 고른 것은 두 장 모두에 쓴다(크기는 독서 기록에만).
+      var src = t[sec] || (t.title || t.body ? { title: t.title, body: t.body } : {});
+      out[sec] = { title: cleanFontPart(src.title, sec, 'title'), body: cleanFontPart(src.body, sec, 'body') };
+      if (!t[sec] && sec === 'diary') { out[sec].title.s = 0; out[sec].body.s = 0; }
+    });
+    return out;
   }
   function cleanFontsAll(t) {
     var out = {};
@@ -2750,7 +3215,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     return /^[A-Za-z0-9 ]{2,60}$/.test(x) ? x : '';
   }
   function fontsOf(w) {
-    if (!store.fonts[w]) store.fonts[w] = cleanFonts(null);
+    if (!store.fonts[w] || !store.fonts[w].books) store.fonts[w] = cleanFonts(store.fonts[w]);
     return store.fonts[w];
   }
   function fontOp(w) {
@@ -2759,10 +3224,12 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     return { type: 'settings', action: 'set', value: value };
   }
   function isDefaultFonts(t) {
-    return !t.title.f && !t.title.s && !t.body.f && !t.body.s && !t.extra.length;
+    return !t.extra.length && ['books', 'diary'].every(function (sec) {
+      return !t[sec].title.f && !t[sec].title.s && !t[sec].body.f && !t[sec].body.s;
+    });
   }
 
-  var loadedFonts = {}, previewFonts = {}, uploaded = {};   // uploaded: id -> 이름
+  var loadedFonts = {}, uploaded = {};   // uploaded: id -> 이름
   function gfWeights(name) {
     for (var i = 0; i < FONT_LIST.length; i++) if (FONT_LIST[i][1] === name) return FONT_LIST[i][2];
     return '';
@@ -2778,15 +3245,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     if (!name || loadedFonts[name] || name === 'Nanum Myeongjo') return;
     loadedFonts[name] = true;
     var w = gfWeights(name);
-    addCss('https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name).replace(/%20/g, '+') +
-      (w ? ':wght@' + w : '') + '&display=swap');
-  }
-  // 설정의 글꼴 고르기 칸에서만 쓰는 가벼운 미리보기(필요한 글자만 받는다)
-  function loadPreviewFont(name, text) {
-    if (!name || loadedFonts[name] || previewFonts[name]) return;
-    previewFonts[name] = true;
-    addCss('https://fonts.googleapis.com/css2?family=' + encodeURIComponent(name).replace(/%20/g, '+') +
-      '&text=' + encodeURIComponent(text) + '&display=swap');
+    var fam = encodeURIComponent(name).replace(/%20/g, '+');
+    var link = addCss('https://fonts.googleapis.com/css2?family=' + fam + (w && w !== '400' ? ':wght@' + w : '') + '&display=swap');
+    // 굵기 요청이 맞지 않아 실패하면 기본 굵기만 다시 받는다.
+    if (w && w !== '400') link.onerror = function () { addCss('https://fonts.googleapis.com/css2?family=' + fam + '&display=swap'); };
   }
   function familyOf(f) {
     if (!f) return '';
@@ -2794,13 +3256,17 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     if (f.slice(0, 2) === 'u:' && uploaded[f.slice(2)]) return "'U" + f.slice(2) + "'";
     return '';
   }
+  function stackOf(f) {
+    var fam = familyOf(f);
+    return fam ? fam + ', var(--serif)' : 'var(--serif)';
+  }
   function applyFonts() {
-    var t = fontsOf(writer), st = document.body.style;
-    var tf = familyOf(t.title.f), bf = familyOf(t.body.f);
-    st.setProperty('--title-font', tf ? tf + ', var(--serif)' : 'var(--serif)');
-    st.setProperty('--body-font', bf ? bf + ', var(--serif)' : 'var(--serif)');
-    st.setProperty('--ts', t.title.s ? String(t.title.s / FONT_SIZE.title.base) : '1');
-    st.setProperty('--bs', t.body.s ? String(t.body.s / FONT_SIZE.body.base) : '1');
+    var sec = fontPage();
+    var t = fontsOf(writer)[sec], st = document.body.style;
+    st.setProperty('--title-font', stackOf(t.title.f));
+    st.setProperty('--body-font', stackOf(t.body.f));
+    st.setProperty('--ts', t.title.s ? String(t.title.s / FONT_SIZE[sec].title.base) : '1');
+    st.setProperty('--bs', t.body.s ? String(t.body.s / FONT_SIZE[sec].body.base) : '1');
   }
 
   // 올린 글꼴 파일은 이 휴대폰의 IndexedDB에 둔다(용량이 커서 일반 저장소에는 넣지 않는다).
@@ -2859,59 +3325,72 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   }
 
   // 설정 화면의 글씨체 칸
-  var fontTarget = 'title';
-  var PREVIEW_TEXT = '오늘의 문장 한 줄 Aa';
+  var fontSec = 'books';
+  function fillSelect(sel, current) {
+    sel.textContent = '';
+    sel.appendChild(h('option', { value: '' }, '기본 (나눔명조)'));
+    var t = fontsOf(writer);
+    FONT_GROUPS.forEach(function (g) {
+      var og = h('optgroup', { label: g[0] });
+      g[1].forEach(function (f) {
+        if (f[1] === 'Nanum Myeongjo') return;
+        og.appendChild(h('option', { value: 'g:' + f[1] }, f[0]));
+      });
+      sel.appendChild(og);
+    });
+    if (t.extra.length) {
+      var og2 = h('optgroup', { label: '가져온 글꼴' });
+      t.extra.forEach(function (name) { og2.appendChild(h('option', { value: 'g:' + name }, name)); });
+      sel.appendChild(og2);
+    }
+    var ids = Object.keys(uploaded);
+    if (ids.length) {
+      var og3 = h('optgroup', { label: '내 글꼴 파일' });
+      ids.forEach(function (id) { og3.appendChild(h('option', { value: 'u:' + id }, uploaded[id])); });
+      sel.appendChild(og3);
+    }
+    // 이 휴대폰에 없는 파일 글꼴이 골라져 있으면 그렇다고 보여 준다.
+    if (current && !Array.prototype.some.call(sel.options, function (o) { return o.value === current; })) {
+      sel.appendChild(h('option', { value: current }, current.slice(0, 2) === 'u:' ? '이 휴대폰에 없는 글꼴 파일 (기본으로 보임)' : current.slice(2)));
+    }
+    sel.value = current;
+  }
   function drawFontPicker() {
-    var t = fontsOf(writer), part = t[fontTarget], lim = FONT_SIZE[fontTarget];
-    $('fontNote').textContent = '‘' + writer + '’의 글씨체입니다. 제목과 본문을 따로 고를 수 있습니다.';
-    Array.prototype.forEach.call($('fontTarget').children, function (b) {
-      b.setAttribute('aria-pressed', b.getAttribute('data-ft') === fontTarget ? 'true' : 'false');
+    var t = fontsOf(writer)[fontSec], lim = FONT_SIZE[fontSec];
+    $('fontNote').textContent = '‘' + writer + '’의 글씨체입니다. 독서 기록과 하루 일기를 따로 정합니다.';
+    Array.prototype.forEach.call($('fontSection').children, function (b) {
+      b.setAttribute('aria-pressed', b.getAttribute('data-fs') === fontSec ? 'true' : 'false');
     });
-    var grid = $('fontGrid');
-    grid.textContent = '';
-    var card = function (key, label, family, tag, onRemove) {
-      var b = h('button', { type: 'button', class: 'fontcard', 'aria-pressed': part.f === key ? 'true' : 'false',
-        onclick: function () { setFont(key); } },
-        h('b', null, label), h('span', null, PREVIEW_TEXT), tag ? h('em', null, tag) : null);
-      b.style.fontFamily = family ? family + ', var(--serif)' : 'var(--serif)';
-      if (onRemove) {
-        var x = h('span', { class: 'x', role: 'button', 'aria-label': label + ' 빼기', title: '빼기' }, '✕');
-        x.addEventListener('click', function (e) { e.stopPropagation(); onRemove(); });
-        b.appendChild(x);
-      }
-      grid.appendChild(b);
-    };
-    card('', '기본 (나눔명조)', '', null);
-    FONT_LIST.forEach(function (f) {
-      if (f[1] === 'Nanum Myeongjo') return;
-      loadPreviewFont(f[1], f[0] + PREVIEW_TEXT);
-      card('g:' + f[1], f[0], "'" + f[1] + "'", null);
+    $('ftTitleHead').textContent = '제목 · ' + lim.title.what;
+    $('ftBodyHead').textContent = '본문 · ' + lim.body.what;
+    fillSelect($('ftTitleFont'), t.title.f);
+    fillSelect($('ftBodyFont'), t.body.f);
+    [['title', 'ftTitleSize', 'ftTitleSizeLabel'], ['body', 'ftBodySize', 'ftBodySizeLabel']].forEach(function (x) {
+      var part = t[x[0]], L = lim[x[0]], r = $(x[1]);
+      r.min = L.min; r.max = L.max; r.value = part.s || L.base;
+      var lab = $(x[2]);
+      lab.textContent = '크기 ';
+      lab.appendChild(h('b', null, (part.s || L.base) + 'px'));
     });
-    t.extra.forEach(function (name) {
-      loadGoogleFont(name);
-      card('g:' + name, name, "'" + name + "'", '가져옴', function () { removeExtra(name); });
+    // 미리보기는 고른 장의 글씨체로 그린다.
+    $('fpWhat').textContent = (fontSec === 'books' ? '독서 기록' : '하루 일기') + ' 미리보기';
+    var pt = $('fpTitle'), pb = $('fpBody');
+    pt.textContent = fontSec === 'books' ? (store.title || '나의 외로움이 나를 이겨낼 수 있는 힘이 되었다.') : (store.diaryTitles[writer] || 'Little Forest, 작은 숲의 날들');
+    pb.textContent = fontSec === 'books' ? '“읽는 내내 숨을 고르기 어려웠다.” Slow days, small meals.' : '오늘은 비가 왔다. It rained all day, and I liked it.';
+    pt.style.fontFamily = stackOf(t.title.f);
+    pb.style.fontFamily = stackOf(t.body.f);
+    pt.style.fontSize = Math.min(26, (t.title.s || lim.title.base) * (fontSec === 'books' ? 0.66 : 1.1)) + 'px';
+    pb.style.fontSize = (t.body.s || lim.body.base) + 'px';
+    // 가져온 글꼴과 올린 파일 목록(빼기)
+    var ul = $('mineFonts');
+    ul.textContent = '';
+    fontsOf(writer).extra.forEach(function (name) {
+      ul.appendChild(h('li', null, h('span', null, name + ' (구글 폰트)'), h('button', { type: 'button', onclick: function () { removeExtra(name); } }, '빼기')));
     });
     Object.keys(uploaded).forEach(function (id) {
-      card('u:' + id, uploaded[id], "'U" + id + "'", '내 파일', function () { removeUploaded(id); });
+      ul.appendChild(h('li', null, h('span', null, uploaded[id] + ' (내 파일)'), h('button', { type: 'button', onclick: function () { removeUploaded(id); } }, '빼기')));
     });
-    if (part.f.slice(0, 2) === 'u:' && !uploaded[part.f.slice(2)]) {
-      grid.appendChild(h('p', { class: 'hint', style: 'grid-column:1/-1;margin:4px 0 0;font-size:12px;color:var(--ink-soft)' },
-        '고른 글꼴 파일이 이 휴대폰에 없어 기본 글씨체로 보입니다. 같은 파일을 이 휴대폰에도 올려 주세요.'));
-    }
-    var range = $('fontSize');
-    range.min = lim.min; range.max = lim.max;
-    range.value = part.s || lim.base;
-    $('fontSizeLabel').innerHTML = '';
-    $('fontSizeLabel').appendChild(document.createTextNode('크기 '));
-    $('fontSizeLabel').appendChild(h('b', null, (part.s || lim.base) + 'px'));
-    $('fontSize').setAttribute('aria-label', lim.what + ' 크기');
-    var pv = $('fontPreview');
-    pv.firstChild.style.fontFamily = 'var(--title-font)';
-    pv.firstChild.style.fontSize = 'calc(20px * var(--ts,1))';
-    pv.lastChild.style.fontFamily = 'var(--body-font)';
-    pv.lastChild.style.fontSize = 'calc(15px * var(--bs,1))';
   }
-  var fontTimer;
   function fontsChanged() {
     applyFonts();
     drawFontPicker();
@@ -2919,18 +3398,24 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     save();
     queue(fontOp(writer));
   }
-  function setFont(key) {
-    fontsOf(writer)[fontTarget].f = key;
+  function setFontSec(sec) {
+    fontSec = sec;
+    if (fontPage() !== sec) setPage(sec, true);   // 바꾸는 장을 바로 보여 준다
+    drawFontPicker();
+  }
+  function setFont(kind, key) {
+    if (key.slice(0, 2) === 'g:') loadGoogleFont(key.slice(2));
+    fontsOf(writer)[fontSec][kind].f = key;
     fontsChanged();
   }
-  function setFontSize(px) {
-    var lim = FONT_SIZE[fontTarget];
+  function setFontSize(kind, px) {
+    var L = FONT_SIZE[fontSec][kind];
     px = Math.round(Number(px));
-    fontsOf(writer)[fontTarget].s = px === lim.base ? 0 : px;
+    fontsOf(writer)[fontSec][kind].s = px === L.base ? 0 : px;
     fontsChanged();
   }
-  function resetFontPart() {
-    fontsOf(writer)[fontTarget] = { f: '', s: 0 };
+  function resetFontPart(kind) {
+    fontsOf(writer)[fontSec][kind] = { f: '', s: 0 };
     fontsChanged();
   }
   function addGoogleFont() {
@@ -2940,8 +3425,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var known = FONT_LIST.some(function (f) { return f[1].toLowerCase() === name.toLowerCase(); });
     if (known) {
       var hit = FONT_LIST.filter(function (f) { return f[1].toLowerCase() === name.toLowerCase(); })[0];
-      setFont('g:' + hit[1]);
-      toast('이미 목록에 있는 글꼴이라 바로 골랐습니다.');
+      $('gfName').value = '';
+      toast('‘' + hit[0] + '’은(는) 이미 목록에 있습니다. 위 드롭다운에서 골라 주세요.');
       return;
     }
     $('gfAdd').disabled = true;
@@ -2956,14 +3441,16 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       }
       if (t.extra.indexOf(name) === -1) t.extra.push(name);
       $('gfName').value = '';
-      setFont('g:' + name);
-      toast('‘' + name + '’ 글꼴을 더했습니다.');
+      fontsChanged();
+      toast('‘' + name + '’ 글꼴을 더했습니다. 드롭다운의 ‘가져온 글꼴’에서 고르세요.');
     }, function () { $('gfAdd').disabled = false; toast('글꼴을 불러오지 못했습니다.'); });
   }
   function removeExtra(name) {
     var t = fontsOf(writer);
     t.extra = t.extra.filter(function (x) { return x !== name; });
-    ['title', 'body'].forEach(function (k) { if (t[k].f === 'g:' + name) t[k].f = ''; });
+    ['books', 'diary'].forEach(function (sec) {
+      ['title', 'body'].forEach(function (k) { if (t[sec][k].f === 'g:' + name) t[sec][k].f = ''; });
+    });
     fontsChanged();
   }
   function uploadFont(file) {
@@ -2974,8 +3461,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       registerUploaded(rec).then(function () {
         return dbPut(rec).catch(function () { toast('글꼴을 저장하지 못해 이번에만 쓸 수 있습니다.'); });
       }).then(function () {
-        setFont('u:' + rec.id);
-        toast('‘' + rec.name + '’ 글꼴을 더했습니다.');
+        fontsChanged();
+        toast('‘' + rec.name + '’ 글꼴을 더했습니다. 드롭다운의 ‘내 글꼴 파일’에서 고르세요.');
       }, function () { toast('이 파일은 글꼴로 읽을 수 없습니다. .ttf .otf .woff .woff2 파일을 올려 주세요.'); });
     };
     reader.onerror = function () { toast('파일을 읽지 못했습니다.'); };
@@ -2986,7 +3473,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     dbDel(id);
     WRITERS.forEach(function (w) {
       var t = fontsOf(w);
-      ['title', 'body'].forEach(function (k) { if (t[k].f === 'u:' + id) t[k].f = ''; });
+      ['books', 'diary'].forEach(function (sec) {
+        ['title', 'body'].forEach(function (k) { if (t[sec][k].f === 'u:' + id) t[sec][k].f = ''; });
+      });
     });
     fontsChanged();
   }
@@ -3043,6 +3532,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   function openSettings() {
     drawWho();
+    if (sync.url) syncNow().then(function () { if ($('setSheet').open) drawMail(); });
+    fontSec = fontPage();
     drawFontPicker();
     closeSheets();
     pick_ = { page: themePage(), key: 'frame' };
@@ -3159,7 +3650,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   }
 
   /* ---------- 구글 시트와 맞추기 ---------- */
-  var oldScript = false, oldScriptWarned = false;
+  var oldScript = false, oldScriptWarned = false, lettersOld = false;
   var serverInfo = null;       // 마지막으로 시트에서 받은 상태(점검용)
   var lastBeat = 0;
   var syncing = false, syncAgain = false, syncState = 'idle', syncTimer, settingsPushed = false, themesPushed = false;
@@ -3178,6 +3669,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     store.books.forEach(function (b) { ops.push({ type: 'book', action: 'upsert', record: b }); });
     store.diary.forEach(function (d) { ops.push({ type: 'diary', action: 'upsert', record: d }); });
     store.notes.forEach(function (n) { ops.push({ type: 'note', action: 'upsert', record: n }); });
+    store.letters.forEach(function (l) { ops.push({ type: 'letter', action: 'upsert', record: l }); });
     return ops;
   }
 
@@ -3205,10 +3697,11 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
   function applyLocal(op) {
     if (!op) return;
     if (op.type === 'settings') { adoptSettings(op.value); return; }
-    var name = op.type === 'book' ? 'books' : op.type === 'diary' ? 'diary' : op.type === 'note' ? 'notes' : '';
+    var name = op.type === 'book' ? 'books' : op.type === 'diary' ? 'diary' : op.type === 'note' ? 'notes' : op.type === 'letter' ? 'letters' : '';
     if (!name) return;
     if (op.action === 'upsert') {
-      var rec = name === 'books' ? cleanBook(op.record) : name === 'diary' ? cleanDiary(op.record) : cleanNote(op.record);
+      var rec = name === 'books' ? cleanBook(op.record) : name === 'diary' ? cleanDiary(op.record)
+        : name === 'notes' ? cleanNote(op.record) : cleanLetter(op.record);
       if (!rec) return;
       var i = findById(store[name], rec.id);
       if (i >= 0) store[name][i] = rec; else store[name].push(rec);
@@ -3219,20 +3712,21 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
 
   // 시트에서 받은 한마디로 맞추되, 이 휴대폰에만 있고 시트에 들어간 적이 없는 한마디는
   // (예전 판 Apps Script가 버렸거나 보내다 끊긴 것) 지우지 않고 다시 보낸다.
-  function adoptNotes(list) {
-    var fromSheet = list.map(cleanNote).filter(Boolean);
+  function adoptKept(type, name, clean, list) {
+    var fromSheet = list.map(clean).filter(Boolean);
     var ids = {};
     fromSheet.forEach(function (n) { ids[n.id] = true; onSheet[n.id] = true; });
     var pending = {};
     sync.outbox.forEach(function (op) {
-      if (op && op.type === 'note') pending[op.action === 'delete' ? op.id : op.record && op.record.id] = true;
+      if (op && op.type === type) pending[op.action === 'delete' ? op.id : op.record && op.record.id] = true;
     });
-    var lost = store.notes.filter(function (n) { return !ids[n.id] && !onSheet[n.id] && !pending[n.id]; });
-    lost.forEach(function (n) { sync.outbox.push({ type: 'note', action: 'upsert', record: n }); });
+    var lost = store[name].filter(function (n) { return !ids[n.id] && !onSheet[n.id] && !pending[n.id]; });
+    lost.forEach(function (n) { sync.outbox.push({ type: type, action: 'upsert', record: n }); });
     if (lost.length) resent += lost.length;
-    store.notes = fromSheet;
+    store[name] = fromSheet;
     try { localStorage.setItem(CONF_KEY, JSON.stringify(Object.keys(onSheet).slice(-1500))); } catch (e) {}
   }
+  function adoptNotes(list) { adoptKept('note', 'notes', cleanNote, list); }
   var resent = 0;
 
   function adoptServer(d) {
@@ -3246,7 +3740,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       store.diary = diary;
       // 예전 Apps Script는 한마디를 돌려주지 않으므로, 그때는 휴대폰에 있는 것을 그대로 둔다.
       if (Array.isArray(d.notes)) adoptNotes(d.notes);
+      // 예전 Apps Script는 편지를 모르므로, 그때는 휴대폰에 있는 편지를 그대로 둔다.
+      if (Array.isArray(d.letters)) adoptKept('letter', 'letters', cleanLetter, d.letters);
     }
+    lettersOld = !Array.isArray(d.letters);
     oldScript = !Array.isArray(d.notes);
     if (oldScript && !oldScriptWarned && store.notes.length) {
       oldScriptWarned = true;
@@ -3319,7 +3816,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       save();
       syncState = 'ok';
       if (sync.outbox.length) syncAgain = true;
-      if (resent) { var r_ = resent; resent = 0; setTimeout(function () { toast('시트에 빠져 있던 한마디 ' + r_ + '개를 다시 보냈습니다.'); }, 600); }
+      if (resent) { var r_ = resent; resent = 0; setTimeout(function () { toast('시트에 빠져 있던 한마디와 편지 ' + r_ + '개를 다시 보냈습니다.'); }, 600); }
       render();
       if ($('setSheet').open) drawPicker();
       return { ok: true };
@@ -3419,6 +3916,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     if (!serverInfo.hasNotes) {
       row(false, '시트의 Apps Script가 예전 판입니다.',
         '그래서 한마디가 시트에 저장되지 않고 상대에게 가지 않습니다. 새 Code.gs를 붙여 넣고 배포 관리에서 기존 배포를 ‘새 버전’으로 수정해 주세요.');
+    } else if (serverInfo.version < 6) {
+      row(false, 'Apps Script가 편지를 모르는 예전 판입니다.',
+        '편지가 시트에 저장되지 않아 상대에게 가지 않습니다. 새 Code.gs를 붙여 넣고 배포 관리에서 ‘새 버전’으로 수정해 주세요.');
     } else if (serverInfo.version < 4) {
       row(true, '한마디는 시트에 저장되고 있습니다. (시트에 ' + serverInfo.notes + '개)',
         '새 Code.gs로 다시 배포하면 메일 알림도 쓸 수 있습니다.');
@@ -3440,7 +3940,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     });
     var mail = serverInfo.settings && serverInfo.settings['email_' + me];
     if (me) row(mail ? true : null, mail ? '메일 알림: ' + mail : '메일 알림을 쓰지 않습니다.',
-      mail ? null : '설정에서 메일 주소를 적으면 앱을 닫아 두어도 알림이 옵니다.');
+      mail ? null : '설정의 ‘메일 알림’에 주소를 적으면 앱을 닫아 두어도 알림이 옵니다.');
   }
 
   function submitSync(e) {
@@ -3508,7 +4008,7 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
     var text = JSON.stringify({
       app: 'dokseo-note', version: 3,
       title: store.title, byline: store.byline, sign: store.sign, themes: store.themes, diaryTitles: store.diaryTitles, fonts: store.fonts,
-      books: store.books, diary: store.diary, notes: store.notes, photo: photo
+      books: store.books, diary: store.diary, notes: store.notes, letters: store.letters, photo: photo
     }, null, 2);
     var file;
     try { file = new File([text], name, { type: 'application/json' }); } catch (e) { file = null; }
@@ -3545,6 +4045,10 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
         });
         (Array.isArray(d.notes) ? d.notes : []).map(cleanNote).filter(Boolean).forEach(function (x) {
           var op = { type: 'note', action: 'upsert', record: x };
+          applyLocal(op); queue(op);
+        });
+        (Array.isArray(d.letters) ? d.letters : []).map(cleanLetter).filter(Boolean).forEach(function (x) {
+          var op = { type: 'letter', action: 'upsert', record: x };
           applyLocal(op); queue(op);
         });
         if (d.themes || d.theme) {
@@ -3589,7 +4093,8 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       t.addEventListener('click', function () { setPage(t.getAttribute('data-go')); });
     });
     $('addBtn').addEventListener('click', function () {
-      if (page !== 'diary') openBookSheet(null);
+      if (page === 'letters') openWrite(null);
+      else if (page !== 'diary') openBookSheet(null);
       else openDiarySheet(todayEntry());
     });
     $('titleBtn').addEventListener('click', openNameSheet);
@@ -3658,11 +4163,29 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       if (sync.url && document.visibilityState === 'visible' && Date.now() - sync.last > 50000) syncNow();
     }, 60000);
     $('bellBtn').addEventListener('click', openInbox);
-    Array.prototype.forEach.call($('fontTarget').children, function (b) {
-      b.addEventListener('click', function () { fontTarget = b.getAttribute('data-ft'); drawFontPicker(); });
+    Array.prototype.forEach.call($('lbSeg').children, function (b) {
+      b.addEventListener('click', function () { lbView = b.getAttribute('data-lb'); renderLetters(); });
     });
-    $('fontSize').addEventListener('input', function () { setFontSize(this.value); });
-    $('fontReset').addEventListener('click', resetFontPart);
+    $('writeForm').addEventListener('submit', sendLetter);
+    ['input', 'keyup', 'compositionend', 'change'].forEach(function (n) {
+      $('writeTitle').addEventListener(n, keepLetterDraft);
+      $('writeText').addEventListener(n, keepLetterDraft);
+    });
+    $('letterDelBtn').addEventListener('click', function () { armOrGo(this, deleteLetter); });
+    $('letterReplyBtn').addEventListener('click', function () {
+      var i = findById(store.letters, openLetterId);
+      openWrite(i >= 0 ? store.letters[i] : null);
+    });
+    Array.prototype.forEach.call($('fontSection').children, function (b) {
+      b.addEventListener('click', function () { setFontSec(b.getAttribute('data-fs')); });
+    });
+    $('ftTitleFont').addEventListener('change', function () { setFont('title', this.value); });
+    $('ftBodyFont').addEventListener('change', function () { setFont('body', this.value); });
+    $('ftTitleSize').addEventListener('input', function () { setFontSize('title', this.value); });
+    $('ftBodySize').addEventListener('input', function () { setFontSize('body', this.value); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-reset]'), function (b) {
+      b.addEventListener('click', function () { resetFontPart(b.getAttribute('data-reset')); });
+    });
     $('gfAdd').addEventListener('click', addGoogleFont);
     $('gfName').addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); addGoogleFont(); } });
     $('fileFontBtn').addEventListener('click', function () { $('fontFile').click(); });
@@ -3671,10 +4194,9 @@ dialog#setSheet::backdrop{background:rgba(18,18,24,.16)}
       this.value = '';
     });
     loadUploadedFonts();
-    $('mailSaveBtn').addEventListener('click', saveMail);
     $('warnBand').addEventListener('click', openSyncSheet);
     $('warnBand').addEventListener('keydown', function (e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openSyncSheet(); } });
-    $('alarmBtn').addEventListener('click', function () { if (alarmNote) goToNote(alarmNote); });
+    $('alarmBtn').addEventListener('click', function () { if (alarmNote) { if (isLetter(alarmNote)) goToLetter(alarmNote); else goToNote(alarmNote); } });
     drawWho();
     updateBell(true);
     document.addEventListener('visibilitychange', function () {
