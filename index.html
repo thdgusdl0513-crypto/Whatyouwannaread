@@ -1154,7 +1154,7 @@ body[data-page="letters"] #writers{display:none}
         <dt>알림 켜기</dt>
         <dd>메일과 휴대폰 푸시 가운데 하나만 켜도 됩니다. 앱을 배포한 구글 계정과 같은 주소로 받으면 Gmail이 ‘내가 보낸 메일’로 여겨 알림을 울리지 않을 수 있으니, 그 사람은 휴대폰 푸시를 함께 켜 두는 것이 좋습니다. ① 새 Code.gs를 붙여 넣고 ‘배포 관리’에서 기존 배포를 ‘새 버전’으로 수정합니다. ② Apps Script 편집기 위쪽 함수 목록에서 testMail을 골라 ▶실행을 누르고 권한을 허용합니다(처음 한 번만). ③ 앱 설정의 ‘메일 알림’에 각자 메일 주소를 적고 ‘저장’을 누른 뒤 ‘시험 메일 보내기’로 메일이 오는지 확인합니다. 메일이 안 보이면 스팸함도 확인해 주세요.</dd>
         <dt>편지</dt>
-        <dd>편지 장의 배경과 편지지 색은 설정의 ‘색 바꾸기’에서 ‘편지 배경’, ‘편지지’를 골라 바꿉니다. 맨 위 ‘편지’ 장에서 아래 버튼을 눌러 상대에게 편지를 씁니다. 받은 편지는 봉투로 도착하고, 열어 보면 보낸 쪽 ‘보낸 편지’에 ‘읽음’이 표시됩니다. 새 편지가 오면 종 알림과 메일 알림이 함께 옵니다. 편지는 시트의 ‘송현에게 온 편지’, ‘유정에게 온 편지’ 탭에 쌓입니다.</dd>
+        <dd>편지를 열고 ‘이미지로 저장’을 누르면 편지지 색과 글씨체 그대로 그림 파일로 저장됩니다. 휴대폰에서는 공유 창에서 ‘이미지 저장’을 고르면 사진첩에 들어갑니다. 편지 장의 배경과 편지지 색은 설정의 ‘색 바꾸기’에서 ‘편지 배경’, ‘편지지’를 골라 바꿉니다. 맨 위 ‘편지’ 장에서 아래 버튼을 눌러 상대에게 편지를 씁니다. 받은 편지는 봉투로 도착하고, 열어 보면 보낸 쪽 ‘보낸 편지’에 ‘읽음’이 표시됩니다. 새 편지가 오면 종 알림과 메일 알림이 함께 옵니다. 편지는 시트의 ‘송현에게 온 편지’, ‘유정에게 온 편지’ 탭에 쌓입니다.</dd>
         <dt>한마디 알림</dt>
         <dd>설정에서 이 휴대폰이 누구 것인지 고르면, 상대가 내 일기에 한마디를 남겼을 때 위쪽 종에 숫자가 붙고 알림이 잠깐 내려옵니다. 종을 누르면 받은 한마디를 모아 보고, 하나를 누르면 그 일기로 갑니다. 앱이 열려 있는 동안 1분마다 새 한마디를 확인합니다.</dd>
         <dt>글씨체</dt>
@@ -1197,6 +1197,7 @@ body[data-page="letters"] #writers{display:none}
     <p class="letter-meta" id="letterMeta"></p>
     <div class="actions" style="margin-top:14px">
       <button type="button" class="btn-line warn" id="letterDelBtn">지우기</button>
+      <button type="button" class="btn-line" id="letterImgBtn">이미지로 저장</button>
       <button type="button" class="btn-main" id="letterReplyBtn">답장 쓰기</button>
     </div>
   </div>
@@ -1244,7 +1245,7 @@ body[data-page="letters"] #writers{display:none}
 (function () {
   'use strict';
 
-  var VERSION = '11월 18일 스물여섯 번째 판';
+  var VERSION = '11월 18일 스물일곱 번째 판';
   var KEY = 'dokseo-note-v1';
   var SYNC_KEY = KEY + '-sync';
   var PAGE_KEY = KEY + '-page';
@@ -2194,6 +2195,121 @@ body[data-page="letters"] #writers{display:none}
       updateBell(false);
     }
   }
+  /* ---------- 편지를 그림 파일로 ---------- */
+  // 화면의 편지지와 같은 색·글씨체로 캔버스에 다시 그려 PNG로 만든다.
+  function cssOf(prop, extra) {
+    var probe = document.createElement('span');
+    probe.style.cssText = 'position:absolute;visibility:hidden;' + (extra || '');
+    $('letterPaper').appendChild(probe);
+    var v = getComputedStyle(probe)[prop];
+    probe.remove();
+    return v;
+  }
+  function wrapLines(ctx, text, maxW) {
+    var out = [];
+    String(text).split('\n').forEach(function (para) {
+      if (!para) { out.push(''); return; }
+      var tokens = para.match(/\S+|\s+/g) || [];
+      var line = '';
+      tokens.forEach(function (tk) {
+        var tryLine = line + tk;
+        if (ctx.measureText(tryLine).width <= maxW) { line = tryLine; return; }
+        if (/^\s+$/.test(tk)) { out.push(line); line = ''; return; }
+        if (line.trim()) { out.push(line.replace(/\s+$/, '')); line = ''; }
+        // 한 낱말이 한 줄보다 길면 글자 단위로 나눈다.
+        var chunk = '';
+        Array.from(tk).forEach(function (ch) {
+          if (ctx.measureText(chunk + ch).width > maxW && chunk) { out.push(chunk); chunk = ch; }
+          else chunk += ch;
+        });
+        line = chunk;
+      });
+      out.push(line.replace(/\s+$/, ''));
+    });
+    return out;
+  }
+  function letterToBlob(l) {
+    var bodyStyle = getComputedStyle(document.body);
+    var v = function (name, fb) { return (bodyStyle.getPropertyValue(name) || '').trim() || fb; };
+    var frame = v('--frame', '#e3e2de'), paper = v('--paper-hi', '#f6f2ea'), ink = v('--ink', '#211c18');
+    var rule = v('--rule', 'rgba(33,28,24,.2)'), soft = v('--ink-soft', 'rgba(33,28,24,.64)');
+    var titleFam = cssOf('fontFamily', 'font-family:var(--title-font,var(--serif))');
+    var bodyFam = cssOf('fontFamily', 'font-family:var(--body-font,var(--serif))');
+    var bs = parseFloat(v('--bs', '1')) || 1;
+
+    var W = 1080, M = 56, P = 76, LH = Math.round(64 * Math.max(1, bs));
+    var fTo = '800 34px ' + titleFam, fTitle = '800 ' + Math.round(36 * bs) + 'px ' + bodyFam;
+    var fText = '700 ' + Math.round(31 * bs) + 'px ' + bodyFam, fDate = '400 24px ' + bodyFam;
+    var sample = l.to + l.from + (l.title || '') + l.text.slice(0, 400) + 'To.From.0123456789';
+    var loads = [fTo, fTitle, fText, fDate].map(function (f) {
+      return document.fonts && document.fonts.load ? document.fonts.load(f, sample).catch(function () {}) : null;
+    });
+    return Promise.all(loads).then(function () {
+      var c = document.createElement('canvas');
+      var ctx = c.getContext('2d');
+      var innerW = W - M * 2 - P * 2;
+      ctx.font = fText;
+      var lines = wrapLines(ctx, l.text, innerW);
+      ctx.font = fTitle;
+      var tlines = l.title ? wrapLines(ctx, l.title, innerW) : [];
+      var rows = 1 + tlines.length + lines.length + 1;     // To. / 제목 / 본문 / From.
+      var paperH = P + rows * LH + 40 + 30 + P * 0.6;
+      var H = Math.round(paperH + M * 2);
+      c.width = W; c.height = H;
+      ctx = c.getContext('2d');
+      ctx.fillStyle = frame; ctx.fillRect(0, 0, W, H);
+      ctx.fillStyle = paper; ctx.fillRect(M, M, W - M * 2, paperH);
+      // 줄 긋기
+      ctx.strokeStyle = rule; ctx.lineWidth = 2;
+      for (var y = M + P + LH; y < M + paperH - 20; y += LH) {
+        ctx.beginPath(); ctx.moveTo(M + 28, y - 1); ctx.lineTo(W - M - 28, y - 1); ctx.stroke();
+      }
+      var x = M + P, base = M + P + LH - 18;
+      ctx.textBaseline = 'alphabetic';
+      ctx.fillStyle = ink;
+      ctx.font = fTo; ctx.textAlign = 'left'; ctx.fillText('To. ' + l.to, x, base); base += LH;
+      ctx.font = fTitle; tlines.forEach(function (t) { ctx.fillText(t, x, base); base += LH; });
+      ctx.font = fText; lines.forEach(function (t) { ctx.fillText(t, x, base); base += LH; });
+      ctx.font = fTo; ctx.textAlign = 'right'; ctx.fillText('From. ' + l.from, W - M - P, base);
+      ctx.font = fDate; ctx.fillStyle = soft; ctx.fillText(dateTimeText(l.createdAt), W - M - P, base + 48);
+      return new Promise(function (resolve, reject) {
+        c.toBlob(function (b) { b ? resolve(b) : reject(new Error('blob')); }, 'image/png');
+      });
+    });
+  }
+  function saveLetterImage() {
+    var i = findById(store.letters, openLetterId);
+    if (i < 0) return;
+    var l = store.letters[i];
+    var btn = $('letterImgBtn');
+    btn.disabled = true;
+    var d = new Date(l.createdAt);
+    var name = '편지_' + l.from + '→' + l.to + '_' + d.getFullYear() + pad(d.getMonth() + 1, 2) + pad(d.getDate(), 2) + '.png';
+    letterToBlob(l).then(function (blob) {
+      var file = null;
+      try { file = new File([blob], name, { type: 'image/png' }); } catch (e) {}
+      // 휴대폰: 공유 창에서 ‘이미지 저장’으로 사진첩에 넣을 수 있다.
+      if (file && navigator.canShare && navigator.canShare({ files: [file] }) && matchMedia('(pointer:coarse)').matches) {
+        return navigator.share({ files: [file], title: l.title || '편지' }).then(function () {}, function (e) {
+          if (e && e.name === 'AbortError') return;
+          downloadBlob(blob, name);
+        });
+      }
+      downloadBlob(blob, name);
+      toast('편지를 이미지로 저장했습니다.');
+    }).catch(function () {
+      toast('이미지를 만들지 못했습니다. 다시 눌러 주세요.');
+    }).then(function () { btn.disabled = false; });
+  }
+  function downloadBlob(blob, name) {
+    var url = URL.createObjectURL(blob);
+    var a = h('a', { href: url, download: name });
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(url); }, 4000);
+  }
+
   function dateTimeText(ms) {
     var d = new Date(ms);
     return d.getFullYear() + '. ' + (d.getMonth() + 1) + '. ' + d.getDate() + '. ' + pad(d.getHours(), 2) + ':' + pad(d.getMinutes(), 2);
@@ -4309,6 +4425,7 @@ body[data-page="letters"] #writers{display:none}
       if ($('writeSheet').open && document.activeElement === $('writeText')) keepCaretInView();
     });
     $('letterDelBtn').addEventListener('click', function () { armOrGo(this, deleteLetter); });
+    $('letterImgBtn').addEventListener('click', saveLetterImage);
     $('letterReplyBtn').addEventListener('click', function () {
       var i = findById(store.letters, openLetterId);
       openWrite(i >= 0 ? store.letters[i] : null);
